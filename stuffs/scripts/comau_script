@@ -1,0 +1,16 @@
+loadRTAI
+loadRTnet
+cd /home/lar/C4Gopen/C4GLibrary/testsuite/SimulinkMode5_SERVER
+./SimulinkMode5_server 192.168.7.14:8080 
+
+# PROCEDURA ATTIVAZIONE/DISATTIVAZIONE
+# Attivazione (prima volta):
+# 1. lanciare script
+# 2. drive on
+# 3. mod52
+
+# Disattivazione:
+# 1. drive off
+# 2. mod504
+# 3. per RI-ATTIVARE: prima lanciare script, poi mod_serverRestart, poi punto 2 proc. Attivazione
+

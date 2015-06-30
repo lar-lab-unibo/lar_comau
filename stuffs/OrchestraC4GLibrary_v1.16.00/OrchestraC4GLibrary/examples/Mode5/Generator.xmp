@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Module SYSTEM "xmp1.dtd">
+
+<Module version="1.0">
+	<Parameter
+		name="frequency"
+		value="0.25"
+		unit="Hz"
+		lower-limit="0.1"
+		upper-limit="1.0"
+		tunable="true"
+	/>
+	<Parameter
+		name="amplitude"
+		value="5"
+		unit="deg"
+		lower-limit="1"
+		upper-limit="10"
+		tunable="true"
+	/>
+	<Parameter
+		name="enabledAxes"
+		value="1, 1, 1, 1, 1, 1"
+	/>
+</Module>

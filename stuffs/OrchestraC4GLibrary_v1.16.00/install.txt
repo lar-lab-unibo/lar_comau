@@ -1,0 +1,25 @@
+========== OrchestraC4GLibrary installation notes ==========
+
+1) Before installing OrchestraC4GLibrary prepare your PC
+   with a GNU/Linux 2.6.x/RTAI 3.x development environment.
+
+2) Install OrchestraCore and C4G Open Library.
+
+3) Decompress OrchestraC4GLibrary tarball:
+   tar xjvf OrchestraC4GLibrary_v1.16.00.tar.bz2
+
+4) Compile OrchestraC4GLibrary:
+   cd OrchestraC4GLibrary
+   make
+
+5) Install OrchestraC4GLibrary
+   If you have Ubuntu:
+       sudo make install
+   otherwise (as root):
+       make install
+
+6) Test OrchestraC4GLibrary
+   cd /usr/local/C4Gopen/OrchestraC4GLibrary/examples/Mode5
+   OrchestraCore Loop.xcl
+
+For more details, please refer to C4G Open Library User's Guide.

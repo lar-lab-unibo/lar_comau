@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="Ready" noe="1" />
+	</Inputs>
+	<Outputs>
+		<Out name="FFW Velocity" noe="1" showable="true" />
+	</Outputs>
+	<Extras noe="1" />		<!-- Internal counter -->
+	<Parameters>
+		<Param name="speedCoeff" noe="1" />
+		<Param name="frequency" noe="1" />
+	</Parameters>
+</Interface>

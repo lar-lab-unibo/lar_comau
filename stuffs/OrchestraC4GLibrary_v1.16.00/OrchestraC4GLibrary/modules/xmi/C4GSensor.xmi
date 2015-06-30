@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Outputs>
+		<Out name="C4gOpen instance" noe="1" />
+		<Out name="Target Position" noe="6" unit="gear rotations" showable="true" />
+		<Out name="Target Velocity" noe="6" unit="delta gear rotations" showable="true" />
+		<Out name="Actual Position" noe="6" unit="gear rotations" showable="true" />
+		<Out name="Actual Velocity" noe="6" unit="delta gear rotations" showable="true" />
+		<Out name="Target Current" noe="6" unit="A" showable="true" />
+		<Out name="Dynamic Model" noe="6" unit="A" showable="true" />
+		<Out name="Diagonal Inertia" noe="6" unit="kg*m^2" showable="true" />
+	</Outputs>
+	<Extras noe="1" />
+</Interface>

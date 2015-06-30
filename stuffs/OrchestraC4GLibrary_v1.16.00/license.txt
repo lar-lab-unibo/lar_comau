@@ -1,0 +1,285 @@
+ORCHESTRA COMMUNITY LICENSE VERSION 1.0
+
+BETWEEN
+
+Sintesi SCpA, a company existing under the laws of Italy, with registered office in Modugno (Bari, Italy) , filed at the register of enterprises of Bari, Fiscal Code / VAT 11484230153 (hereinafter “Original Contributor”)
+
+AND
+
+You (as defined in section  I. Definitions)
+
+(Original Contributor and You are hereinafter jointly referred to as the “Parties” and each one as the “Party”).
+
+WHEREAS:
+
+a)Original Contributor intends to license the Research Use of Reference Code, Core Components and Technology Specifications also by permitting the implementation of Technology to promote the research, the innovation and the product development. 
+
+b)You intend to use Reference Code, Core Components and Technology Specifications under and subject to the terms and conditions of this License. 
+
+
+CONTENTS
+
+I. Definitions
+
+II. Research Use Rights
+
+III Restrictions & Community Responsibilities
+
+IV. Governance
+
+
+I. DEFINITIONS
+
+Community Code: Reference Code, included Core Components, Contributed Code and any combination thereof.
+
+Community Member: You, Original Contributor and any other party that has entered into this License (or who is similarly authorized by Original Contributor). 
+
+Contributed Code: Error Corrections, Shared Modifications and any other code other than Reference Code included Core Components made available to all Community Members in accordance with this License.
+
+Contributed Code Specifications: the functional, interface and operational specifications and documentation for the Contributed Code.
+
+Contributor:  any Community Member who makes the Contributed Code available.
+
+Core Components: the source code part of Reference Code that Original Contributor must maintain under control to avoid interoperability problems.
+
+Covered Code: any and all code, including Reference Code, Core Components and related Modifications implementing all or any portion of the Technology.
+
+Error Corrections: modifications which correct any failure of Community Code to conform to any aspect of the Technology Specifications.
+
+Interfaces: classes or other programming code or specifications designed for the use of the Technology comprising a means or link for invoking functionality, operations or protocols and which are additional to or extend the interfaces designated in the Technology Specifications.
+
+Modifications: any change or addition to Covered Code, or new source or object code implementing any portion of the Technology Specifications, but excluding any incorporated Reference Code.
+
+Original Contributor: Sintesi  SCpA
+
+Reference Code: source code, including Core Components, and object code of the Technology rendered available on Technology Site by Original Contributor.
+
+Research Use: research, evaluation, development, personal and individual use, excluding use or distribution for direct and/or indirect commercial (including strategic) gain or advantage.
+
+Research Use License: Orchestra Community License for Research Use
+
+Shared Modifications: Modifications to the Technology which Community Members share with other Community Members.
+
+Technology Specifications: functional, interface and operational specifications and documentation for Technology created by Original Contributor and rendered available on the Technology Site.
+
+Technology: Orchestra software and related documentation described in and contemplated by Technology Specifications and which You have received pursuant to this License.
+
+Technology Site: website created by Original Contributor for accessing Community Code and Technology Specifications by the address www.orchestracontrol.com. 
+
+You/Your: the individual executing this license or the legal entity or entities represented by the individual executing this license. 
+
+II. RESEARCH USE RIGHTS
+
+A. From Original Contributor 
+
+Subject to Your compliance with the terms and conditions of this License, Original Contributor: 
+
+(i) grants You a non-exclusive, worldwide and royalty-free license to the extent of Original Contributor's copyrights and trade secret rights, in and covering Reference Code including Core Components and Technology Specifications to do the following for Your Research Use only:
+
+a)reproduce, prepare derivative works, display and perform Reference Code including Core Components in whole or in part, alone or as part of Covered Code;
+
+b)reproduce, prepare derivative works and display the Technology Specifications;
+
+c)distribute source or object code copies of Reference Code including Core Components, in whole or in part, alone or as part Covered Code, to other Community Members.
+
+(ii) will not, during the term of Your License, bring against You any claim alleging that Your using, making, having made, importing or distributing Community Code for Your Research Use, insofar as permitted under Section II.A. (i) of this License, infringes any patent now owned or hereafter acquired by Original Contributor whose claims cover subject matter contained in or embodied by the Reference Code including Core Components or which would be infringed by the use or distribution of any or all the implementations of the Technology Specification.
+
+(iii) grants to You a non-exclusive, worldwide and royalty-free license, to the extent of its intellectual property rights therein, to use: 
+
+(a) Original Contributor's class, interface and package names only insofar as necessary to accurately reference or invoke Your Modifications for Research Use, and;
+
+(b) any associated software tools, documents and information provided by Original Contributor and rendered available of the Technology Site.
+
+B. From each Community Member 
+
+Subject to compliance with the terms and conditions of this License, each Community Member:
+
+(i) grants to each other Community Member a non-exclusive, worldwide and royalty-free license to the extent of such Community Member's copyrights and trade secret rights in and covering its Contributed Code, to reproduce, modify, display and distribute Contributed Code, in whole or in part, in source code and object code form, to the same extent as permitted under such Community Member's License with Original Contributor (including all supplements thereto).
+
+(ii) will not, during the term of such Community Member's License, bring against any Community Member any claim alleging that using, making, having made, importing or distributing Contributed Code as permitted under this License (including any supplements) infringes any patents or patent applications now owned or hereafter acquired by such Community Member. Such disposition shall also apply in case of using, making, having made, importing or distributing the combination of the Contributed Code with other Covered Code if, at the time the Contributed Code is posted, such addition of the Contributed Code causes this combination to be covered by the Community Member Patents.
+
+C. Ownership of Modifications of Core Components  
+
+(i) You hereby assign to Original Contributor the joint ownership in all worldwide common law, civil law and statutory rights associated with the copyrights, copyright applications and copyright registrations in Modifications of Core Components. To the extent allowable under applicable local laws and copyright conventions, You agree never to assert against Original Contributor or other Community Members or transferees any moral rights therein. You acknowledge that Original Contributor may exercise all rights as a copyright owner of Your Modifications of Core Components, including enforcement against infringers. Both Parties to this Licence shall be able to do all such things in relation to Your Modifications of Core Components as if they were each respectively the sole owners of the copyright and all other relevant intellectual property rights therein. Neither Party has any duty whatsoever to consult with, obtain the consent of, pay or render an accounting to the other Party for any use or distribution of a contribution and derivative work thereof.
+
+(ii) You hereby grant to Original Contributor, a perpetual, irrevocable, non-exclusive, worldwide, no-charge, royalty-free, license over any patents owned or licensable by You at any time without payment to third parties, to make, have made, use, sell, offer to sell, import and otherwise transfer Your Modifications of Core Components in whole or in part, alone or in combination with or included in any product, work or materials arising out from Your Modifications of Core Components. 
+
+(iii) Except as set forth above, You retain all right, title and interest in and to Your Modifications of Core Components and may use them for Your own purposes. 
+
+(iv) You represent that Your Modifications of Core Components are original works and that You are legally entitled to grant the rights and privileges defined in (i) and (ii). You warrant that Your Modifications of Core Components, to the best of Your knowledge, do not violate any other third party copyrights, trademarks, patents or other intellectual property rights.  
+
+D. Subcontracting
+
+You may provide Covered Code to a Community Member or to a contractor having executed an agreement with You that is consistent with Your rights and obligations under This License for the sole purpose of providing development services. Such Community Member or contractor must assign exclusive rights in all work product to You. You agree that such work product is to be treated as Covered Code.  
+
+E. No Implied Licenses
+
+Neither Party is granted any right or license other than the licenses and covenants expressly set out herein. Other than the licenses and covenants expressly set out herein, Original Contributor retains all right, title and interest in Reference Code, Core Components, and Technology Specifications and You retain all right, title and interest in Your Modifications and associated specifications. Except as expressly permitted herein, You must not otherwise use any package, class or interface naming conventions that appear to originate from Original Contributor.
+
+III. RESTRICTIONS AND COMMUNITY RESPONSIBILITIES
+
+As a condition to Your License, You must comply with the restrictions and responsibilities set forth below.
+
+A.Source Code Availability
+
+(i) You must provide source code and any specifications related to Your Error Corrections to Original Contributor as soon as practicable.
+
+(ii) Pursuant to Section II.C (i) (“Ownership of Modifications of Core Components”), You must provide source code and any specifications of Your Modifications of Core Components to Original Contributor as soon as practicable. 
+
+(iii) You, as Contributor, may provide the codes and specifications of Contributed Code, Contributed Code Specifications and any Modifications other than those considered at Section III.A (ii) to Original Contributor at any time at Your discretion. Original Contributor may, at its discretion, post such Contributed Code, Contributed Code Specifications and Modifications on the Technology Site. You may post such Contributed Code, Contributed Code Specifications and Modifications on another website of Your choice.
+
+B.Notices
+
+You must reproduce without alteration copyright and other proprietary notices in any Covered Code that You distribute. The statement "Use and Distribution is subject to the Orchestra Community License available at www.orchestracontrol.com” must appear prominently in Your Modifications and, in all cases, in the same file as all Your copyright and other proprietary notices.
+
+C. Modifications
+
+You must include a diff file with Your Contributed Code that identifies and details the changes or additions You made, the version of Reference Code or Contributed Code You used and the date of such changes or additions. In addition, You must provide any Contributed Code Specifications for Your Contributed Code. Your Modifications are Covered Code and You expressly agree that use and distribution, in whole or in part, of Your Modifications shall only be done in accordance with and subject to this License.
+
+D. Distribution Requirements
+
+(i) You must distribute Reference Code, Contributed Code and any Modifications only to Community Members and for Research Use, in compliance and subject to the conditions of this License
+
+(ii) You must distribute in source code the source code included in the Reference Code and in the Contributed Code
+
+E. Extensions
+
+(i) You may create and add Interfaces, but You must render such Interfaces open by: (a) promptly following completion thereof, publishing to the industry, on a non-confidential basis and free of all copyright restrictions, a reasonably detailed, current and accurate specification for the Interfaces, and: (b) as soon as reasonably possible, but in no event more than thirty (30) days following publication of Your specification, making available on reasonable terms and without discrimination, a reasonably complete and practicable test suite and methodology adequate to create and test implementations of the Interfaces by a reasonably skilled technologist.
+
+(ii) You shall not assert any intellectual property rights You may have covering Your Interfaces which would necessarily be infringed by the creation, use or distribution of all reasonable independent implementations of Your specification of such Interfaces by a Community Member or Original Contributor. Nothing herein is intended to prevent You from enforcing any of Your intellectual property rights covering Your specific implementation of Your Interfaces or functionality using such Interfaces other than as specifically set forth in this Section .
+
+IV. GOVERNANCE
+
+A. License Versions
+
+Only Original Contributor may promulgate new versions of this License. Once You have accepted Reference Code, Core Components, Technology Specifications, Contributed Code and/or Contributed Code Specifications under a version of this License, You may continue to use such version of Reference Code, Core Components, Technology Specifications, Contributed Code and/or Contributed Code Specifications under that version of the License. New code and specifications which You may subsequently choose to accept will be subject to any new License in effect at the time of Your acceptance of such code and specifications.
+
+B. Disclaimer of Warranties
+
+(i) Covered code, all Technology Specifications and Contributed Code Specifications are provided "as is", without warranties of any kind, either express or implied including, without limitation, warranties that any such Covered Code, Technology Specifications and Contributed Code Specifications are free of defects, merchantable, fit for a particular purpose or non-infringing of third party rights. You agree that you bear the entire risk in connection with your use and contribution of any and all Covered Code, Technology Specifications and Contributed Code Specifications under this License. No use of any Covered Code, Technology Specifications or Contributed Code Specifications is authorized except subject to and in consideration for this disclaimer.
+
+(ii) You acknowledge that, although each Community Member grants the licenses set forth in the License and any supplements hereto, no assurances are provided by any Community Member in relation to the fact that Covered Code or any specifications do not infringe the intellectual property rights of any third party.
+
+(iii) You acknowledge that Reference Code, Core Components and Technology Specifications are neither designed nor intended for use in the design, construction, operation or maintenance of any nuclear facility.
+
+C. Limitation Of Liability
+
+Infringement
+
+Each Community Member disclaims any liability to all other Community Members for claims brought by any third party based on infringement of intellectual property rights. Original Contributor represents that, to its knowledge, it has sufficient copyrights to allow You to use and distribute the Reference Code and Core Components as herein permitted (including as permitted in any Supplement hereto) and You represent that, to Your knowledge, You have sufficient copyrights to allow each Community Member and Original Contributor to use and distribute Your Shared Modifications and Error Corrections as herein permitted (including as permitted in any supplements to the License). You agree to notify Original Contributor should You become aware of any potential or actual infringement of the Technology or any of Original Contributor's intellectual property rights in the Technology, Reference Code, Core Components or Technology Specifications.
+
+Suspension
+
+If any portion of, or functionality implemented by, the Reference Code, Core Components, Technology or Technology Specifications becomes the subject of a claim or threatened claim of infringement ("Affected Materials"), Original Contributor may, in its unrestricted discretion, suspend Your rights to use and distribute the Affected Materials under this License. Such suspension of rights will be effective immediately upon Original Contributor's posting of notice of suspension on the Technology Site. Original Contributor has no obligation to lift the suspension of rights related to the Affected Materials until a final, non-appeal able determination is made by a court or governmental agency of competent jurisdiction that Original Contributor is legally able, without the payment of a fee or royalty, to reinstate Your rights to the Affected Materials to the full extent contemplated hereunder. Upon such determination, Original Contributor will lift the suspension by posting a notice to such effect on the Technology Site. Nothing herein shall be construed to prevent You, at Your option and expense, and subject to applicable law and the restrictions and responsibilities set forth in this License and any Supplements, from replacing Reference Code in Affected Materials with non-infringing code or independently negotiating, without compromising or prejudicing Original Contributor's position, to obtain the rights necessary to use Affected Materials as herein permitted.
+
+
+Disclaimer
+
+Without prejudice to article 1229 Italian Civil Code, original contributor's liability or all claims relating to this License or any supplement hereto, whether for breach or tort, is limited to the greater of one thousand dollars (USD 1000.00) or the full amount paid by you for the materials giving rise to the claim, if any. In no event will Original Contributor be liable for any indirect, punitive, special, incidental or consequential damages in connection with or arising out of this License (including, without limitation, loss of profits, use, data or economic advantage of any sort), however it arises and on any theory of liability (including negligence), whether or not Original Contributor has been advised of the possibility of such damage and notwithstanding failure of the essential purpose of any remedy.
+
+D. Termination
+
+(i)You may terminate this License at any time by notifying Original Contributor in writing.
+
+(ii) All Your rights will terminate under this License if You fail to comply with any of the material terms or conditions of this License and do not cure such failure in a reasonable period of time after becoming aware of such non compliance. If You institute a patent litigation against a Community Member with respect to a patent applicable to Community Code, then any patent licenses or covenants granted by such Community Member to You under this License shall terminate as of the date such litigation is filed. In addition, if You institute a patent litigation against any Community Member or Original Contributor alleging that Reference Code, Core Components, Technology or Technology Specifications infringe Your patent(s), then the rights granted to You under Section II.A above will terminate.
+
+E. Miscellaneous
+
+Trademark
+
+You agree to comply with Original Contributor’s Trademark & Logo Usage Requirements, as modified from time to time, available at the Technology Site. Except as expressly provided in this License, You are granted no rights in or to Original Contributor’s trademarks now or hereafter used or licensed by Original Contributor (the “Trademarks”). You agree not to (a) challenge Original Contributor's ownership or use of the Trademarks; (b) attempt to register any Trademark, or any mark or logo substantially similar thereto; or (c) incorporate any Trademark into Your own trademarks, product names, service marks, company names or domain names.
+
+Integration and Assignment
+
+Original Contributor may assign this Research Use License to another by written notification to the other Party. This License represents the complete agreement of the Parties concerning the subject matter hereof.
+
+Severability 
+
+If any provision of this License is held unenforceable, such provision shall be reformed to the extent necessary to make it enforceable, unless to do so would defeat the intent of the Parties, in which case, this License shall terminate.
+
+F. Governing Law
+
+This License is governed by the laws of Italy. All disputes arising out of or in connection with this License shall be exclusively and finally settled under the Rules of Arbitration (the “Rules”) of the International Chamber of Commerce (the “ICC”) by a panel of three arbitrators appointed in accordance with the Rules in force at the time the Request for Arbitration is submitted to the Secretariat of the ICC. The arbitration shall take place in Milan and shall be conducted in the Italian language. 
+
+READ ALL THE TERMS OF THIS LICENSE CAREFULLY BEFORE ACCEPTING. IF YOU ARE AGREEING TO THIS LICENSE ON BEHALF OF A COMPANY, YOU REPRESENT THAT YOU ARE AUTHORIZED TO BIND THE COMPANY TO THE LICENSE. WHETHER YOU ARE ACTING ON YOUR OWN BEHALF OR THAT OF A COMPANY, YOU MUST BE OF MAJORITY AGE AND OTHERWISE ENTITLED TO ENTER INTO CONTRACTS.
+
+
+COMMERCIAL USE SUPPLEMENT TO ORCHESTRA COMMUNITY LICENSE 
+
+
+I. PURPOSE AND EFFECT 
+
+This Commercial Use Supplement is required for Commercial Use of Covered Code and is operative for all components unless differently specified. 
+The rights and responsibilities set forth in this Commercial Use Supplement are additional to those in Your Orchestra Community License.
+
+II. DEFINITIONS
+
+"Commercial Use" means any use of Covered Code including distribution of the same, internally, to Community Members and to third parties (“Third Parties”), for any direct or indirect commercial or strategic gain or advantage.
+
+III. COMMERCIAL USE RIGHTS
+
+A. Subject and conditioned to Your compliance with the terms and conditions of Your Research Use License and the additional terms and conditions set forth in this Commercial Use Supplement, including the provisions of Section IV below, Original Contributor hereby grants You, in addition to the rights listed at Section II.A of the Research Use License, the right to:
+
+a) use, reproduce, display, perform and distribute internally source and object code copies of Covered Code for Commercial Use;
+
+b) reproduce and distribute to Community Members and Third Parties through multiple tiers of distribution object code copies of Covered Code for Commercial Use;
+
+c) reproduce and distribute source code of Covered Code to Community Members having accepted the terms and conditions of this Commercial Use Supplement; 
+
+d) reproduce and distribute a copy of the Technology Specifications (which may be reformatted or reduced) with Covered Code for Commercial Use.
+
+IV. ADDITIONAL REQUIREMENTS AND COMMUNITY RESPONSIBILITIES
+
+As a condition to the Commercial Use rights granted above, You must comply with the following restrictions and community responsibilities (in addition to those in the Orchestra Community License):
+
+A. Modifications
+
+According to Section II.C and III.A of Orchestra Community License, in case You intend to distribute source code of Core Components including modifications to them, you must provide such code to Original Contributor. 
+In case You intend to distribute object code of Core Components including modifications to them, You may provide the source code to Original Contributor in order to evaluate the possibility to include it in new versions of Reference Code.
+
+B. Commercial Distribution Requirement
+
+You may distribute object code copies for Commercial Use as herein contemplated under a license agreement of Your choice upon condition that such license agreement is consistent with Your rights and obligations under the Orchestra Community License and this Commercial Use Supplement. You may provide warranties, indemnities and/or other additional terms and conditions in Your license agreements, provided that it is clear that such warranties, indemnities and/or additional terms and conditions are offered by You only. You hereby agree to hold each Community Member harmless and indemnify them against any liability arising in connection with the above mentioned warranties, indemnities and/or additional terms and conditions. You will pay all damages, costs and fees awarded by a court or arbitrator having jurisdiction over the matter or any settlement amount negotiated by You and attributable to such claim.
+
+C. Third Parties License Terms
+
+You must include the following specifications in Third Parties license agreements accompanying copies of Covered Code distributed for Commercial Use:  
+
+(i) Software is copyrighted;
+(ii) Title to Software and all related intellectual property rights is retained by Sintesi SCpA and/or its licensors.
+
+D. Defense
+
+Original Contributor will have the right, at its own discretion, to defend You, at Original Contributor's expense, in connection with a claim that Your Commercial Use of Reference Code is an infringement of a third party's intellectual property rights. It is intended that, in this case, You agree to duly cooperate with Original Contributor.
+
+E. Notice of Breach or Infringement 
+
+You hereby undertake to immediately inform Original Contributor in writing of any breach or violation of the terms and conditions of this Commercial Use Supplement that You become aware of or when You become aware of any potential or actual infringement by a third party of the Technology and/or Original Contributor’s intellectual property rights therein.
+
+F. Proprietary Rights Notices
+
+You must not remove any copyright, trademark, license text or other proprietary notices and/or legends of Original Contributor or its suppliers contained on or in the Covered Code, Technology Specifications and Contributed Code Specifications.
+
+G. Support to You
+
+Technical support is not provided to You by Original Contributor under Orchestra Community License and this Commercial Use Supplements. You may obtain one or more support programs, if available, from Original Contributor. 
+
+H. Relationship 
+
+The relationship created by Orchestra Licence and this Commercial Use Supplement is that between licensor and licensee only. You hereby waive the benefit of any law or regulation dealing with the establishment and regulation of franchises or agencies.
+
+
+V. License fees & Payment 
+
+Any organization or individual using Covered Code for Commercial Use in accordance with the terms and conditions of this Commercial Use Supplements must pay a software licensing fee to Original Contributor.
+
+The amount of the licence fee, to be negotiated between You and Original Contributor, will vary in consideration of the software licensed components and their combinations. 
+
+Original Contributor reserves the right to vary the software licensing fees at its sole discretion without notice or justification at any time.
+
+Any organization or individual using Covered Code for Commercial Use is bound by the terms and conditions of this agreement, regardless of whether or not payment is required for such use.  
+
+Covered Code is licensed on a "per end user hardware" basis, which means that one software licensing fee must be purchased for each copy of Covered Code in use. You can use multiple copies of Covered Code on a single hardware provided that You have a separate license for each copy.
+
+You may not use Covered Code if you have not paid the required software licensing fee as specified in this agreement. Usage of Covered Code if you have not paid the required software licensing fee is in violation of Original Contributor’s copyright.  
+

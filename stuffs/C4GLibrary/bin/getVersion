@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#
+# getVersion - Copyright (C) 2007-2008 Sintesi SCpA
+#
+# Developer: Giovanni Totaro (2006-)
+#
+
+SCRIPT_DIR=$(dirname $0)
+
+FULL_VERSION_STRING=`grep "<<<" $SCRIPT_DIR/../../version.txt`
+WITHOUT_TAIL=${FULL_VERSION_STRING% >>>}
+VERSION=${WITHOUT_TAIL#<<< C4gOpen }
+VERSION_FULL=${WITHOUT_TAIL#<<< }
+VERSION_SMALL=${VERSION%%-*}
+
+if [ "$1" == "--full" ]; then
+	echo $VERSION_FULL
+elif [ "$1" == "--small" ]; then
+	echo $VERSION_SMALL
+else
+	echo $VERSION
+fi
+

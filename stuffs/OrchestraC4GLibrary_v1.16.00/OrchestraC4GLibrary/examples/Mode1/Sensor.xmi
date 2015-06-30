@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Outputs>
+		<Out name="C4G" noe="1" />
+		<Out name="Ready" noe="1" />
+		<Out name="Actual Position" noe="1" unit="gear rots" showable="true" />
+		<Out name="Current Limit" noe="1" unit="A" showable="true" />
+	</Outputs>
+	<Extras noe="2" />
+</Interface>

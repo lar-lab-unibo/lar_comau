@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Module SYSTEM "xmp1.dtd">
+
+<Module version="1.0">
+	<Parameter
+		name="speedCoeff"
+		value="0.0005"
+		lower-limit="0.0"
+		upper-limit="0.002"
+		tunable="true"
+	/>
+	<Parameter
+		name="frequency"
+		value="1.0"
+		unit="Hz"
+		lower-limit="0.0"
+		upper-limit="30.0"
+		tunable="true"
+	/>
+</Module>

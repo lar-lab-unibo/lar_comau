@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="C4gOpen instance" noe="1" />
+		<In name="Target Position" noe="6" />
+	</Inputs>
+</Interface>

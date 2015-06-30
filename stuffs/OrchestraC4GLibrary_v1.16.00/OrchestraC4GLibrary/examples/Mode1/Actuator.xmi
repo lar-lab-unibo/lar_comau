@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="C4G" noe="1" />
+		<In name="Target Position" noe="1" />
+		<In name="Target Velocity" noe="1" />
+		<In name="FFW Velocity" noe="1" />
+		<In name="FFW Current" noe="1" />
+	</Inputs>
+</Interface>

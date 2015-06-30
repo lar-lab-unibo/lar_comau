@@ -1,0 +1,5 @@
+<launch>
+	<arg name="model" />
+	<param name="robot_description" textfile="$(arg model)" />
+	<node name="comau_driver" pkg="lar_comau" type="comau_driver" output="screen" />
+</launch>

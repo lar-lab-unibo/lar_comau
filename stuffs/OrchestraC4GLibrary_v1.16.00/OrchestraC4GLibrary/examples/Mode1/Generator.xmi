@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="Ready" noe="1" />
+		<In name="Actual Position" noe="1" />
+		<In name="Current Limit" noe="1" />
+	</Inputs>
+	<Outputs>
+		<Out name="Target Position" noe="1" showable="true" />
+		<Out name="Target Velocity" noe="1" showable="true" />
+		<Out name="FFW Velocity" noe="1" showable="true" />
+		<Out name="FFW Current" noe="1" showable="true" />
+	</Outputs>
+	<Status>
+		<Sts noe="1" />
+		<Sts noe="1" />
+	</Status>
+	<Parameters>
+		<Param name="currentCoeff" noe="1" />
+	</Parameters>
+</Interface>

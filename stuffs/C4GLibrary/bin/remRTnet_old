@@ -1,0 +1,31 @@
+#!/bin/bash
+
+RTNET_BIN_DIR=/usr/local/rtnet/sbin
+
+##############################################################################
+# Substitute "rtnet_driver_name" of your network card in the following line. #
+##############################################################################
+
+RT_ETH_DRV=rt_8139too
+
+if [ -z "$RT_ETH_DRV" ]; then
+	echo
+	echo -e "RT_ETH_DRV not set in remRTnet script (please refer to \"C4G Open Library User's Guide\").\n"
+	exit 1
+fi
+
+ifconfig rteth0 down
+
+${RTNET_BIN_DIR}/rtifconfig rtlo down
+${RTNET_BIN_DIR}/rtifconfig rteth0 down
+
+rmmod rtcap
+rmmod ${RT_ETH_DRV}
+rmmod rt_loopback
+rmmod rtudp
+rmmod rtpacket
+rmmod rtipv4
+rmmod rtnet
+
+rm /dev/rtnet
+

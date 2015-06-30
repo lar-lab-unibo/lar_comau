@@ -1,0 +1,13 @@
+<launch>
+	<arg name="model" />
+<!--	<arg name="gui" default="False" /> -->
+	<param name="robot_description" textfile="$(arg model)" />
+	<param name="source_list" value="j" />
+<!--	<param name="use_gui" value="$(arg gui)"/> -->
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+<!--	<node name="set_joint_publisher" pkg="my_robot_urdf" type="set_joint_publisher" output="screen" /> -->
+	<node name="kinematics" pkg="my_robot_urdf" type="kinematics" output="screen" />
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+	<node name="comau" pkg="my_robot_urdf" type="comau" output="screen" />
+<!--	<node name="rviz" pkg="rviz" type="rviz"  args="-d $(find my_robot_urdf)/urdf.rviz" /> -->
+</launch>

@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# This script file:
+# - removes Linux kernel module of the driver of your NIC;
+# - loads RTnet modules necessary to make use of RTnet;
+# - loads RTnet driver of your NIC;
+# - configures the C4G Open subnet.
+
+RTAI_MOD_DIR=/usr/realtime/modules
+RTNET_MOD_DIR=/usr/local/rtnet/modules
+RTNET_BIN_DIR=/usr/local/rtnet/sbin
+
+##########################################################
+# Substitute "linux_driver_name" and "rtnet_driver_name" #
+# of your network card in the following lines.           #
+##########################################################
+
+#ETH_DRV=8139too
+#RT_ETH_DRV=rt_8139too
+ETH_DRV=3c59x
+RT_ETH_DRV=rt_3c59x
+#ETH_DRV=e1000e #### by rob
+#RT_ETH_DRV=rt_3c59x #### by rob
+
+LOCAL_IP=10.2.12.149				
+TARGET_IP_SMP=10.2.12.150
+TARGET_IP_DSA=10.2.12.154
+
+##########################################################
+# Substitute SMP+ MAC address in the following line      #
+##########################################################
+
+TARGET_MAC_ADDR_SMP=00:04:50:49:88:C2
+TARGET_MAC_ADDR_DSA=02:00:1B:B3:30:9A
+
+if [ -z "$ETH_DRV" ]; then
+	echo
+	echo -e "ETH_DRV not set in loadRTnet script (please refer to \"C4G Open Library User's Guide\").\n"
+	exit 1
+fi
+
+if [ -z "$RT_ETH_DRV" ]; then
+	echo
+	echo -e "RT_ETH_DRV not set in loadRTnet script (please refer to \"C4G Open Library User's Guide\").\n"
+	exit 1
+fi
+
+if [ -z "$TARGET_MAC_ADDR_SMP" ]; then
+	echo
+	echo -e "TARGET_MAC_ADDR not set in loadRTnet script (please refer to \"C4G Open Library User's Guide\").\n"
+	exit 1
+fi
+
+mknod /dev/rtnet c 10 240
+
+rmmod ${ETH_DRV}
+#rmmod 8139cp #### by rob
+rmmod r8169
+
+insmod ${RTNET_MOD_DIR}/rtnet.ko
+insmod ${RTNET_MOD_DIR}/rtipv4.ko
+insmod ${RTNET_MOD_DIR}/rtpacket.ko
+insmod ${RTNET_MOD_DIR}/rtudp.ko
+insmod ${RTNET_MOD_DIR}/rt_loopback.ko
+insmod ${RTNET_MOD_DIR}/${RT_ETH_DRV}.ko
+
+
+echo "modules loaded, sleeping 1..."
+
+sleep 1
+
+echo "loading rtcap module..."
+
+insmod ${RTNET_MOD_DIR}/rtcap.ko
+
+echo "configuring interfaces..."
+
+${RTNET_BIN_DIR}/rtifconfig rtlo up 127.0.0.1
+${RTNET_BIN_DIR}/rtifconfig rteth0 up ${LOCAL_IP}
+
+ifconfig rteth0 up
+
+echo "filling rtroute table..."
+
+${RTNET_BIN_DIR}/rtroute add ${TARGET_IP_SMP} ${TARGET_MAC_ADDR_SMP} dev rteth0
+${RTNET_BIN_DIR}/rtroute add ${TARGET_IP_DSA} ${TARGET_MAC_ADDR_DSA} dev rteth0
+
+echo "done"

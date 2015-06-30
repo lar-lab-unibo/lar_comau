@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sync
+rmmod rtai_rtdm
+rmmod rtai_mbx
+rmmod rtai_sem
+rmmod rtai_lxrt
+rmmod rtai_hal
+sync
+

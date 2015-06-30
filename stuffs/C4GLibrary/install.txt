@@ -1,0 +1,26 @@
+========== C4G Open Library installation notes ==========
+
+1) Before installing C4G Open Library prepare your PC
+   with a GNU/Linux 2.6.x/RTAI 3.x development environment.
+
+2) Put C4G Open Library tarball in a directory for which
+   you have write permissions (e.g. your home).
+
+3) Decompress C4G Open Library tarball:
+   tar xjvf C4Gopen_v1.16.00.tar.bz2
+
+4) Compile C4G Open Library:
+   cd C4Gopen/C4GLibrary
+   make
+
+5) Install C4G Open Library
+   If you have Ubuntu:
+       sudo make install
+   otherwise (as root):
+       make install
+
+6) Test C4G Open Library
+   cd /usr/local/C4Gopen/testsuite/TestMode0Debug
+   ./TestMode0Debug
+
+For more details, please refer to C4G Open Library User's Guide.

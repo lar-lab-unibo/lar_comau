@@ -1,0 +1,13 @@
+#!/bin/bash
+
+RTAI_SRC_DIR=/usr/src/rtai
+RTAI_MODULES_DIR=/usr/realtime/modules
+
+sync
+make -f ${RTAI_SRC_DIR}/GNUmakefile dev
+insmod ${RTAI_MODULES_DIR}/rtai_hal.ko
+insmod ${RTAI_MODULES_DIR}/rtai_lxrt.ko
+insmod ${RTAI_MODULES_DIR}/rtai_sem.ko
+insmod ${RTAI_MODULES_DIR}/rtai_mbx.ko
+insmod ${RTAI_MODULES_DIR}/rtai_rtdm.ko
+sync

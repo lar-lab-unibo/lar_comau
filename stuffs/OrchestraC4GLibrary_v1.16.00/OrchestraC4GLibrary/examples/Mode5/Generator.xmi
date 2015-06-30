@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="Ready" noe="1" />
+		<In name="Actual Position" noe="6" />
+	</Inputs>
+	<Outputs>
+		<Out name="Target Position" noe="6" showable="true" />
+		<Out name="Target Velocity" noe="6" showable="true" />
+	</Outputs>
+	<Status>
+		<Sts noe="6" />		<!-- Initial position -->
+		<Sts noe="6" />		<!-- Previous position -->
+	</Status>
+	<Extras noe="1" />		<!-- Internal counter -->
+	<Parameters>
+		<Param name="frequency" noe="1" />
+		<Param name="amplitude" noe="1" />
+		<Param name="enabledAxes" noe="6" />
+	</Parameters>
+</Interface>

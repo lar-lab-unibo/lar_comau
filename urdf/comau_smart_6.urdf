@@ -1,0 +1,70 @@
+<robot name="comau_smart_6">
+
+  <link name="base_link">
+  </link>
+
+  <link name="link1">
+  </link>
+
+  <joint name="base_to_link1" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0" rpy="-3.14159 0 0"/>
+    <limit effort="1000" velocity="1000" lower="-2.9670" upper="2.9670" /> <!-- -170,+170 -->
+  </joint>
+
+  <link name="link2">
+  </link>
+
+  <joint name="link1_to_link2" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0.15 0 0" rpy="1.57075 1.57075 0"/>
+    <limit effort="1000" velocity="1000" lower="-1.4835" upper="2.7052" /> <!-- -85,+155 -->
+  </joint>
+
+  <link name="link3">
+  </link>
+
+  <joint name="link2_to_link3" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz="0.59 0 0" rpy="-3.14159 0 -1.57075"/>
+    <limit effort="1000" velocity="1000" lower="-2.9670" upper="0.0" /> <!-- -170,+0 -->
+  </joint>
+
+  <link name="link4">
+  </link>
+
+  <joint name="link3_to_link4" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin xyz="0.13 -0.64707 0" rpy="-1.57075 0 0"/>
+  </joint>
+
+  <link name="link5">
+  </link>
+
+  <joint name="link4_to_link5" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin xyz="0 0 0" rpy="-1.57075 0 0"/>
+    <limit effort="1000" velocity="1000" lower="-2.2689" upper="2.2689" /> <!-- -130,+130 -->
+  </joint>
+
+  <link name="link6">
+  </link>
+
+  <joint name="link5_to_link6" type="continuous">
+    <axis xyz="0 0 1"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <origin xyz="0 0 0" rpy="1.57075 0 0"/>
+  </joint>
+
+</robot>

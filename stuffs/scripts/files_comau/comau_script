@@ -1,0 +1,5 @@
+loadRTAI
+loadRTnet
+cd /home/lar/C4Gopen/C4GLibrary/testsuite/SimulinkMode5_SERVER
+./SimulinkMode5_server 192.168.7.14:8080  
+

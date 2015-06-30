@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Module SYSTEM "xmp1.dtd">
+
+<Module version="1.0">
+	<Parameter
+		name="currentCoeff"
+		value="0.05"
+		lower-limit="0.01"
+		upper-limit="0.1"
+	/>
+</Module>

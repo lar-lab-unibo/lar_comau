@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE Interface SYSTEM "xmi1.dtd">
+
+<Interface version="1.0">
+	<Inputs>
+		<In name="Ready" noe="1" />
+		<In name="Current Limit" noe="1" />
+	</Inputs>
+	<Outputs>
+		<Out name="Delta Current" noe="1" unit="A" showable="true" />
+	</Outputs>
+	<Extras noe="1" />		<!-- Internal counter -->
+	<Parameters>
+		<Param name="currentCoeff" noe="1" />
+		<Param name="frequency" noe="1" />
+	</Parameters>
+</Interface>
