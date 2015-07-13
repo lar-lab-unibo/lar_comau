@@ -179,6 +179,8 @@ void broadcastComauTransforms(  tf::TransformBroadcaster& tf_broadcaster,lar_com
   //BASE MARKER
   tf::Transform tBM;
   tf::poseKDLToTF (robot->base_marker, tBM);
+
+  std::cout << "Sending:" <<tBM.getOrigin()[2]<<std::endl;
   tf_broadcaster.sendTransform(tf::StampedTransform(tBM, ros::Time::now(), "base", "comau_base_marker"));
 
 
