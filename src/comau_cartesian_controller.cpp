@@ -24,6 +24,8 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Pose.h"
 #include <kdl/frames_io.hpp>
+#include <tf/transform_broadcaster.h>
+#include "tf_conversions/tf_kdl.h"
 
 #include "lar_comau/ComauState.h"
 #include "lar_comau/ComauCommand.h"
@@ -153,7 +155,37 @@ void jointStateReceived( const sensor_msgs::JointState& msg ){
 }
 
 
+void broadcastComauTransforms(  tf::TransformBroadcaster& tf_broadcaster,lar_comau::ComauState& sending_pose){
 
+  //END EFFECTOR
+  tf::Transform t0U;
+  t0U.setOrigin( tf::Vector3(
+    sending_pose.pose.position.x/1000.0f,
+    sending_pose.pose.position.y/1000.0f,
+    sending_pose.pose.position.z/1000.0f
+  ));
+
+  tf::Quaternion q(
+    sending_pose.pose.orientation.x,
+    sending_pose.pose.orientation.y,
+    sending_pose.pose.orientation.z,
+    sending_pose.pose.orientation.w
+  );
+
+  t0U.setRotation(q);
+  tf_broadcaster.sendTransform(tf::StampedTransform(t0U, ros::Time::now(), "base", "comau_t0U"));
+
+
+  //BASE MARKER
+  tf::Transform tBM;
+  tf::poseKDLToTF (robot->base_marker, tBM);
+  tf_broadcaster.sendTransform(tf::StampedTransform(tBM, ros::Time::now(), "base", "comau_base_marker"));
+
+
+
+
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -163,6 +195,7 @@ int main(int argc, char *argv[])
   //NODES
   ros::init(argc, argv, node_name);
   ros::NodeHandle n;
+  tf::TransformBroadcaster tf_broadcaster;
   ros::Subscriber comau_cartesian_controller_sub = n.subscribe( "lar_comau/comau_cartesian_controller",1,poseReceived );
   ros::Subscriber comau_joint_states_sub = n.subscribe( "lar_comau/comau_joint_states",1,jointStateReceived );
   ros::Publisher comau_joint_state_pub = n.advertise<sensor_msgs::JointState>("lar_comau/comau_joint_state_publisher", 100);
@@ -178,12 +211,15 @@ int main(int argc, char *argv[])
   n.param("robot_description", robot_desc_string, std::string());
   robot = new lar_comau::ComauSmartSix(robot_desc_string,"base_link", "link6");
   //TODO: Set tool by parameters
-  robot->setTool(0.04f,0.075f,-0.266f,0 , PI, 0);
-  //robot->setTool(-0.04f,-0.075f,-0.095f,0 , PI, 0);
+  //robot->setTool(0.04f,0.075f,-0.266f,0 , PI, 0);
+  robot->setTool(0.0f,0.0f,-0.095f,0 , PI, 0);
+  robot->setBaseMarker(0.151f,0.0f,-0.450f-0.100f,0.0f,PI/2.0f,-PI/2.0);
+
+
   //FIR 2-Order
   fir = new lar_comau::FIROrder2(7,0.0005);
   fir->setSampleTime(1);
-
+ //Z -450
 
   bool first_iteration = true;
 
@@ -319,7 +355,7 @@ int main(int argc, char *argv[])
               sending_pose.q[i] = q_state[i];
             }
             comau_full_state_pub.publish(sending_pose);
-
+            broadcastComauTransforms(tf_broadcaster,sending_pose);
 
             /**
             * Debug
