@@ -3,7 +3,6 @@
 #include <iostream>
 #include "ComauSmartSix.h"
 #include "geometry_msgs/Pose.h"
-#include "lar_comau/ComauPose.h"
 #include "lar_comau/ComauCommand.h"
 
 using namespace std;
