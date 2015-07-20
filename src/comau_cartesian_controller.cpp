@@ -215,9 +215,9 @@ int main(int argc, char *argv[])
         //TODO: Set tool by parameters
         //robot->setTool(0.04f,0.075f,-0.266f,0 , PI, 0); //TOOL CON LA PENNA
 
-        //robot->setTool(0.0f,0.0f,-0.095f,0 , PI, 0); // FLANGIA
+        robot->setTool(0.0f,0.0f,-0.095f,0 , PI, 0); // FLANGIA
 
-        robot->setTool(-0.1192f,0.0f,-0.095f-0.262f,0, -PI/2.0f, 0); // FLANGIA
+        // robot->setTool(-0.1192f,0.0f,-0.095f-0.262f-0.025f,0, -PI/2.0f, 0); // FLANGIA
 
         //robot->setTool(0,0,0,0,0,0); // WRIST
 

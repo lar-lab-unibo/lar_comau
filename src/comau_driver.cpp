@@ -238,33 +238,35 @@ int main(int argc, char *argv[])
 										double lastDeg = previousPositions[i]*360.0/txRate[i]-calibCONSTANTS[i]*360.0/txRate[i];
 
 	 									//Operative virtual limit control
-										if (setPoint[i]<(VT_LIM[i][0])) {setPoint[i] = VT_LIM[i][0]; cout << " \n Reset Forzato- "<<i+1<<"\n";}
+										bool virtual_limit_control = false;
+										if(virtual_limit_control){
+											if (setPoint[i]<(VT_LIM[i][0])) {setPoint[i] = VT_LIM[i][0]; cout << " \n Reset Forzato- "<<i+1<<"\n";}
 
-										if (setPoint[i]<=(VT_LIM[i][0]+1) && lastDeg<=(VT_LIM[i][0]+1) && lastDeg>setPoint[i]) {
-											double proximity = abs(VT_LIM[i][0]-lastDeg);
-											if (proximity <= 0) proximity=0;
-											if (proximity >= 1) proximity=1;
-											double corrective = pow((proximity/1),2);
-											if (corrective>1) corrective=1;
-											setPoint[i] = lastDeg - corrective*abs(setPoint[i]-lastDeg);
-										}// END if (setPoint[i]<=(VT_LIM[i][0]+1) ...
+											if (setPoint[i]<=(VT_LIM[i][0]+1) && lastDeg<=(VT_LIM[i][0]+1) && lastDeg>setPoint[i]) {
+												double proximity = abs(VT_LIM[i][0]-lastDeg);
+												if (proximity <= 0) proximity=0;
+												if (proximity >= 1) proximity=1;
+												double corrective = pow((proximity/1),2);
+												if (corrective>1) corrective=1;
+												setPoint[i] = lastDeg - corrective*abs(setPoint[i]-lastDeg);
+											}// END if (setPoint[i]<=(VT_LIM[i][0]+1) ...
 
 
-										if (setPoint[i]>(VT_LIM[i][1])){
-											setPoint[i] = VT_LIM[i][1]; cout << " \n Reset Forzato+ "<<i+1<<"\n";
-										}// END if (setPoint[i]>(VT_LIM[i][1]))
+											if (setPoint[i]>(VT_LIM[i][1])){
+												setPoint[i] = VT_LIM[i][1]; cout << " \n Reset Forzato+ "<<i+1<<"\n";
+											}// END if (setPoint[i]>(VT_LIM[i][1]))
 
-										//if (i==4) cout << " Proximity+ "<<i+1 <<": "<<(VT_LIM[i][1]-lastDeg)<<"\n";
+											//if (i==4) cout << " Proximity+ "<<i+1 <<": "<<(VT_LIM[i][1]-lastDeg)<<"\n";
 
-										if (setPoint[i]>=(VT_LIM[i][1]-1) && lastDeg>=(VT_LIM[i][1]-1) && lastDeg<setPoint[i]) {
-											double proximity = abs(VT_LIM[i][1]-lastDeg);
-											if (proximity <= 0) proximity=0;
-											if (proximity >= 1) proximity=1;
-											double corrective = pow((proximity/1),2);
-											if (corrective>1) corrective=1;
-											setPoint[i] = lastDeg + corrective*abs(setPoint[i]-lastDeg);
-										}// END if (setPoint[i]>=(VT_LIM[i][1]-1) ...
-
+											if (setPoint[i]>=(VT_LIM[i][1]-1) && lastDeg>=(VT_LIM[i][1]-1) && lastDeg<setPoint[i]) {
+												double proximity = abs(VT_LIM[i][1]-lastDeg);
+												if (proximity <= 0) proximity=0;
+												if (proximity >= 1) proximity=1;
+												double corrective = pow((proximity/1),2);
+												if (corrective>1) corrective=1;
+												setPoint[i] = lastDeg + corrective*abs(setPoint[i]-lastDeg);
+											}// END if (setPoint[i]>=(VT_LIM[i][1]-1) ...
+										}
 										//////////
 										//cout << "\n allowMotion = " << allowMotion << " \n";
 										//for (int h = 0; h < 6; h++) {
