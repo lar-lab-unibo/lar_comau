@@ -74,6 +74,10 @@ namespace lar_comau{
     this->tool.M = KDL::Rotation::EulerZYZ(e1,e2,e3);
   }
 
+  void ComauSmartSix::setTool(geometry_msgs::Pose& pose){
+    tf::PoseMsgToKDL(pose,this->tool);
+  }
+
   void ComauSmartSix::setBaseMarker(float x, float y, float z, float e1, float e2, float e3,std::string angle_type){
     this->base_marker.p = {x,y,z};
     this->base_marker.M = KDL::Rotation::EulerZYZ(e1,e2,e3);

@@ -27,7 +27,7 @@
 #include <kdl/chainiksolverpos_nr_jl.hpp>
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include "sensor_msgs/JointState.h"
-
+#include "tf_conversions/tf_kdl.h"
 
 #define PI 3.14159265
 
@@ -52,11 +52,12 @@ namespace lar_comau{
           int ik(float x, float y,float z,float roll, float pitch,float yaw,float* q_in,float* q_out,bool use_radians = false);
           int ik(float x, float y,float z,float qx, float qy,float qz, float qw, float* q_in,float* q_out);
           void setTool(float x, float y, float z, float e1, float e2, float e3, std::string angle_type = "zyz");
+          void setTool(geometry_msgs::Pose& pose);
 
           //BASE MARKER
           void setBaseMarker(float x, float y, float z, float e1, float e2, float e3, std::string angle_type = "zyz");
           KDL::Frame base_marker;
-          
+
       private:
         KDL::Tree tree;
         KDL::Chain chain;
