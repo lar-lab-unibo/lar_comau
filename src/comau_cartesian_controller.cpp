@@ -70,7 +70,7 @@ void poseReceived( const lar_comau::ComauCommand& comau_command ){
         std::string command = comau_command.command;
         geometry_msgs::Pose pose = comau_command.pose;
 
-        std::cout << "Received Command:\n"<<comau_command<<std::endl;
+        //std::cout << "Received Command:\n"<<comau_command<<std::endl;
 
         if(command.compare("close")==0) {
                 exit(1);
@@ -136,7 +136,7 @@ float* q_out = new float[6];
 float q_distance = 0.0f;
 bool joints_state_ready = false;
 bool is_moving = false;
-float moving_error_th = 0.0001f;
+float moving_error_th = 0.00025f;
 void jointStateReceived( const sensor_msgs::JointState& msg ){
 
         for(int i = 0; i < 6; i++) {
@@ -151,8 +151,9 @@ void jointStateReceived( const sensor_msgs::JointState& msg ){
 
 
         q_distance = 0.0f;
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < 6; i++){
                 q_distance = sqrt((q_state[i]-q_out[i])*(q_state[i]-q_out[i]));
+        }
 
         is_moving = q_distance > moving_error_th;
 }
@@ -183,13 +184,7 @@ void broadcastComauTransforms(  tf::TransformBroadcaster& tf_broadcaster,lar_com
         tf::Transform tBM;
         tf::poseKDLToTF (robot->base_marker, tBM);
 
-        std::cout << "Sending:" <<tBM.getOrigin()[2]<<std::endl;
         tf_broadcaster.sendTransform(tf::StampedTransform(tBM, ros::Time::now(), "base", "comau_base_marker"));
-
-
-
-
-
 }
 
 int main(int argc, char *argv[])
@@ -236,6 +231,23 @@ int main(int argc, char *argv[])
         while (ros::ok())
         {
                 if(joints_state_ready) {
+
+                        /** comau feedback */
+                        {
+                          float x,y,z,qx,qy,qz,qw;
+                          robot->fk(q_state,x,y,z,qx,qy,qz,qw);
+
+                          lar_comau::ComauState feedback_state;
+                          feedback_state.pose.position.x = x*1000.0f;
+                          feedback_state.pose.position.y = y*1000.0f;
+                          feedback_state.pose.position.z = z*1000.0f;
+                          feedback_state.pose.orientation.x = qx;
+                          feedback_state.pose.orientation.y = qy;
+                          feedback_state.pose.orientation.z = qz;
+                          feedback_state.pose.orientation.w = qw;
+                          broadcastComauTransforms(tf_broadcaster,feedback_state);
+
+                        }
 
                         if(first_iteration) {
                                 /**
@@ -365,7 +377,7 @@ int main(int argc, char *argv[])
                                                 sending_pose.q[i] = q_state[i];
                                         }
                                         comau_full_state_pub.publish(sending_pose);
-                                        broadcastComauTransforms(tf_broadcaster,sending_pose);
+                                      //  broadcastComauTransforms(tf_broadcaster,sending_pose);
 
                                         /**
                                          * Debug
@@ -381,7 +393,7 @@ int main(int argc, char *argv[])
                                         std::cout << "qw: "<<fir->output[6]<<std::endl;
                                         std::cout << "Filtered Qs:\n";
                                         for(int i = 0; i < 6; i++)
-                                                std::cout << "j"<<i+1<<": "<<q_out[i]<<std::endl;
+                                                std::cout << "j"<<i+1<<": "<<q_out[i]<< " <- "<<q_state[i]<<std::endl;
 
                                         if(is_moving) {
                                                 std::cout << "Robot is moving!! "<< q_distance<<std::endl;

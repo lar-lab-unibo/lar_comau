@@ -38,16 +38,16 @@ namespace lar_comau{
     q_limit_max(0)=2.9670;
     q_limit_max(1)=2.7052;
     q_limit_max(2)=0;
-    q_limit_max(3)=3.14;//3.6651;
+    q_limit_max(3)=3.6651;//3.14;//3.6651;
     q_limit_max(4)=1.7444;//2.2689;
-    q_limit_max(5)=3.6651;//47.1;
+    q_limit_max(5)=6.28;//47.1;
 
     q_limit_min(0)=-2.9670;
     q_limit_min(1)=-1.4835;
     q_limit_min(2)=-2.9670;
-    q_limit_min(3)=-3.14;//-3.6651;
+    q_limit_min(3)=-3.6651;//-3.14;//-3.6651;
     q_limit_min(4)=-1.7444;//-2.2689;
-    q_limit_min(5)=-3.6651;//-47.1;
+    q_limit_min(5)=-6.28;//-47.1;
 
     /** Refine Sovlers */
     chain_solver_ik_jl = new ChainIkSolverPos_NR_JL(
