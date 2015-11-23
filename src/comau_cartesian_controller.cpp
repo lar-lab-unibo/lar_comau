@@ -136,7 +136,7 @@ float* q_out = new float[6];
 float q_distance = 0.0f;
 bool joints_state_ready = false;
 bool is_moving = false;
-float moving_error_th = 0.00025f;
+float moving_error_th = 0.0015f;
 void jointStateReceived( const sensor_msgs::JointState& msg ){
 
         for(int i = 0; i < 6; i++) {
@@ -152,10 +152,13 @@ void jointStateReceived( const sensor_msgs::JointState& msg ){
 
         q_distance = 0.0f;
         for(int i = 0; i < 6; i++){
-                q_distance = sqrt((q_state[i]-q_out[i])*(q_state[i]-q_out[i]));
+                q_distance += (q_state[i]-q_out[i])*(q_state[i]-q_out[i]);
         }
+        q_distance = sqrt(q_distance);
 
         is_moving = q_distance > moving_error_th;
+
+        std::cout << "Q_error: "<<q_distance<<std::endl;
 }
 
 
@@ -216,7 +219,8 @@ int main(int argc, char *argv[])
         //robot->setTool(0.0f,0.0f,-0.095f,0 , PI, 0); // FLANGIA
         //robot->setTool(0,0,0,0,0,0); // WRIST
         //robot->setTool(-0.1192f,0.0f,-0.095f-0.262f,0, -PI/2.0f, 0); // FLANGIA
-        robot->setTool(0.065f+0.003f,-0.025f,-0.095f-0.07f,0, PI, PI/2.0f); // CRABBY FAKE CAMERA
+//        robot->setTool(0.065f+0.003f,-0.025f,-0.095f-0.07f,0, PI, PI/2.0f); // CRABBY FAKE CAMERA
+	robot->setTool(0.0f,0.0f,-0.095f-0.07f,0, PI, PI/2.0f);
 
         robot->setBaseMarker(0.151f,0.0f,-0.450f-0.100f,0.0f,PI/2.0f,-PI/2.0);
 
