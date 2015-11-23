@@ -135,3 +135,12 @@ target_link_libraries(
   lar_comau_commons
 )
 add_dependencies(dan_tester ${PROJECT_NAME}_generate_messages_cpp)
+
+#NODE - Gripper Test Novembre
+add_executable(gripper_test_novembre src/gripper_test_novembre.cpp)
+target_link_libraries(
+  gripper_test_novembre
+  ${catkin_LIBRARIES}
+  lar_comau_commons
+)
+add_dependencies(gripper_test_novembre ${PROJECT_NAME}_generate_messages_cpp)
