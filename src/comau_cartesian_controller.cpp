@@ -212,15 +212,18 @@ int main(int argc, char *argv[])
         //ROBOT
         std::string robot_desc_string;
         n.param("robot_description", robot_desc_string, std::string());
+
+
         robot = new lar_comau::ComauSmartSix(robot_desc_string,"base_link", "link6");
+
         //TODO: Set tool by parameters
         //robot->setTool(0.04f,0.075f,-0.266f,0 , PI, 0); //TOOL CON LA PENNA
 
         //robot->setTool(0.0f,0.0f,-0.095f,0 , PI, 0); // FLANGIA
         //robot->setTool(0,0,0,0,0,0); // WRIST
         //robot->setTool(-0.1192f,0.0f,-0.095f-0.262f,0, -PI/2.0f, 0); // FLANGIA
-//        robot->setTool(0.065f+0.003f,-0.025f,-0.095f-0.07f,0, PI, PI/2.0f); // CRABBY FAKE CAMERA
-	robot->setTool(0.0f,0.0f,-0.095f-0.07f,0, PI, PI/2.0f);
+        //robot->setTool(0.065f+0.003f,-0.025f,-0.095f-0.07f,0, PI, PI/2.0f); // CRABBY FAKE CAMERA
+	      robot->setTool(0.0f,0.0f,-0.095f-0.07f,0, PI, PI/2.0f);
 
         robot->setBaseMarker(0.151f,0.0f,-0.450f-0.100f,0.0f,PI/2.0f,-PI/2.0);
 
@@ -236,7 +239,7 @@ int main(int argc, char *argv[])
         {
                 if(joints_state_ready) {
 
-                        /** comau feedback */
+                        // comau feedback
                         {
                           float x,y,z,qx,qy,qz,qw;
                           robot->fk(q_state,x,y,z,qx,qy,qz,qw);
@@ -254,9 +257,8 @@ int main(int argc, char *argv[])
                         }
 
                         if(first_iteration) {
-                                /**
-                                 * First Iteration Reset Filter to current Robot Pose. It avoids initial spikes
-                                 */
+                                // First Iteration Reset Filter to current Robot Pose. It avoids initial spikes
+
 
                                 first_iteration = false;
 
@@ -277,9 +279,8 @@ int main(int argc, char *argv[])
 
                         }else{
 
-                                /**
-                                 * Initial Security Check for IK solution available or not
-                                 */
+                                // Initial Security Check for IK solution available or not
+
                                 int c = robot->ik(
                                         current_pose.position.x,
                                         current_pose.position.y,
@@ -294,9 +295,8 @@ int main(int argc, char *argv[])
 
 
                                 if(c<0) {
-                                        /**
-                                         * No IK Solution
-                                         */
+                                        //  No IK Solution
+
                                         std::cout << "Not Reachable!!"<<std::endl;
                                         current_command_reset = false;
 
@@ -312,9 +312,8 @@ int main(int argc, char *argv[])
 
                                         int c;
 
-                                        /**
-                                         * Cheks Movement Type. If JOINT send IK only one time. If LINEAR sends IK solution over each iteration
-                                         */
+                                        // Cheks Movement Type. If JOINT send IK only one time. If LINEAR sends IK solution over each iteration
+
                                         bool new_q_out = false;
                                         if(current_comau_command.command.compare("joint")==0 && current_command_reset) {
                                                 std::cout << "New REF!!"<<std::endl;
@@ -348,9 +347,8 @@ int main(int argc, char *argv[])
                                                 std::cout << "Same REF!!"<<std::endl;
                                         }
 
-                                        /**
-                                         * Builds Joint State Command to send
-                                         */
+                                        //  Builds Joint State Command to send
+
                                         if(new_q_out) {
                                                 sensor_msgs::JointState msg;
                                                 buildJointStateForComau(msg,q_out);
@@ -383,9 +381,8 @@ int main(int argc, char *argv[])
                                         comau_full_state_pub.publish(sending_pose);
                                       //  broadcastComauTransforms(tf_broadcaster,sending_pose);
 
-                                        /**
-                                         * Debug
-                                         */
+                                        //  Debug
+
 
                                         std::cout << "Filtered Pose:\n";
                                         std::cout << "x: "<<fir->output[0]<<std::endl;
@@ -417,5 +414,6 @@ int main(int argc, char *argv[])
 
                 ros::spinOnce();
         }
+        
         return 0;
 }

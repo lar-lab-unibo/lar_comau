@@ -178,18 +178,6 @@ int main(int argc, char *argv[])
 
 		int val;
 
-		/** ROS JOINT MESSAGE */
-		sensor_msgs::JointState actual_joint_state;
-		actual_joint_state.name.resize(6);
-		actual_joint_state.position.resize(6);
-		actual_joint_state.velocity.resize(6);
-		actual_joint_state.name[0] ="base_to_link1";
-		actual_joint_state.name[1] ="link1_to_link2";
-		actual_joint_state.name[2] ="link2_to_link3";
-		actual_joint_state.name[3] ="link3_to_link4";
-		actual_joint_state.name[4] ="link4_to_link5";
-		actual_joint_state.name[5] ="link5_to_link6";
-
 		while (keepGoingOn){
 			if (c4gOpen.receive()){
 
@@ -341,21 +329,22 @@ int main(int argc, char *argv[])
 									exit(1);
 								}*/// END if (size == -1)
 
+								sensor_msgs::JointState actual_joint_state;
 								actual_joint_state.header.stamp = ros::Time::now();
+								actual_joint_state.name.resize(6);
+								actual_joint_state.position.resize(6);
+								actual_joint_state.name[0] ="base_to_link1";
 								actual_joint_state.position[0]= getGears[0];
+								actual_joint_state.name[1] ="link1_to_link2";
 								actual_joint_state.position[1]= getGears[1];
+								actual_joint_state.name[2] ="link2_to_link3";
 								actual_joint_state.position[2]= getGears[2];
+								actual_joint_state.name[3] ="link3_to_link4";
 								actual_joint_state.position[3]= getGears[3];
+								actual_joint_state.name[4] ="link4_to_link5";
 								actual_joint_state.position[4]= getGears[4];
+								actual_joint_state.name[5] ="link5_to_link6";
 								actual_joint_state.position[5]= getGears[5];
-
-								actual_joint_state.velocity[0]= Speed[0];
-								actual_joint_state.velocity[1]= Speed[1];
-								actual_joint_state.velocity[2]= Speed[2];
-								actual_joint_state.velocity[3]= Speed[3];
-								actual_joint_state.velocity[4]= Speed[4];
-								actual_joint_state.velocity[5]= Speed[5];
-
 
 								joint_state_pub.publish(actual_joint_state);
 
