@@ -14,6 +14,8 @@
 #include <string.h>
 #include <map>
 
+#include "geometry_msgs/Pose.h"
+
 #include <kdl_parser/kdl_parser.hpp>
 
 #include <kdl/chainfksolver.hpp>
@@ -48,6 +50,7 @@ namespace lar_comau{
           virtual ~ComauSmartSix();
           int fk(float* q_in ,float& x,float& y,float& z,float& e1, float& e2, float& e3);
           int fk(float* q_in ,float& x,float& y,float& z,float& qx, float& qy, float& qz ,float& qw);
+          int fk(float* q_in ,geometry_msgs::Pose& pose);
 
           int ik(float x, float y,float z,float roll, float pitch,float yaw,float* q_in,float* q_out,bool use_radians = false);
           int ik(float x, float y,float z,float qx, float qy,float qz, float qw, float* q_in,float* q_out);
@@ -77,6 +80,7 @@ namespace lar_comau{
         KDL::JntArray q_limit_max ;
         KDL::JntArray q_limit_min ;
 
+        float* pose_temp_data;
 
     };
 }

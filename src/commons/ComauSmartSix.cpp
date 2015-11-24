@@ -16,6 +16,7 @@ ComauSmartSix::ComauSmartSix(
         ) {
 
         this->robot_description = robot_description;
+        this->pose_temp_data = new float[7];
 
         /** Create TREE */
         if (!kdl_parser::treeFromString(robot_description, this->tree)) {
@@ -31,6 +32,7 @@ ComauSmartSix::ComauSmartSix(
 
                 /** Joints LIMITS */
                 int n = this->tree.getNrOfJoints();
+                ROS_INFO("Instantiated new Robot with %d joints",n);
                 this->q_limit_max = JntArray(n);
                 this->q_limit_min = JntArray(n);
 
@@ -133,6 +135,25 @@ int ComauSmartSix::fk(float* q_in,float& x,float& y,float& z,float& qx, float& q
         qz = dqz;
         qw = dqw;
 
+}
+
+int ComauSmartSix::fk(float* q_in,geometry_msgs::Pose& pose){
+        this->fk(q_in,
+                 this->pose_temp_data[0],
+                 this->pose_temp_data[1],
+                 this->pose_temp_data[2],
+                 this->pose_temp_data[3],
+                 this->pose_temp_data[4],
+                 this->pose_temp_data[5],
+                 this->pose_temp_data[6]
+                 );
+        pose.position.x = this->pose_temp_data[0];
+        pose.position.y= this->pose_temp_data[1];
+        pose.position.z= this->pose_temp_data[2];
+        pose.orientation.x= this->pose_temp_data[3];
+        pose.orientation.y= this->pose_temp_data[4];
+        pose.orientation.z= this->pose_temp_data[5];
+        pose.orientation.w= this->pose_temp_data[6];
 }
 
 int ComauSmartSix::ik(float x, float y,float z,float roll, float pitch,float yaw,float* q_in,float* q_out,bool use_radians ){
