@@ -29,6 +29,7 @@
 #define PI 		3.14159265358979
 #define	ARM		1
 
+bool setpoint_in_deg = true;
 double mesg[7];
 bool allowMotion=0;
 bool startServer;
@@ -70,7 +71,11 @@ void jCallback( const sensor_msgs::JointState& msg ){
 	while(al==0);
 
 	for( int i=0;i<6;i++ ){
-		degreeSetPoint=(msg.position[i]*180.0f)/M_PI;
+		if(setpoint_in_deg){
+			degreeSetPoint=msg.position[i];
+		}else{
+			degreeSetPoint=(msg.position[i]*180.0f)/M_PI;
+		}
 		setPoint[i]=degreeSetPoint;
 	}
 }
