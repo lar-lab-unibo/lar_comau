@@ -35,6 +35,21 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+
+#Lar Tools
+MESSAGE("###### LAR_TOOLS ########")
+find_package(lar_tools)
+include_directories(${lar_tools_INCLUDE_DIRS})
+
+#Boost
+FIND_PACKAGE( Boost )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/cmake/Modules/")
 set(CMAKE_INCLUDE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/include/")
 
@@ -127,6 +142,9 @@ target_link_libraries(
 )
 add_dependencies(comau_cartesian_controller ${PROJECT_NAME}_generate_messages_cpp)
 
+
+
+
 #NODE - Comau Testing Bench
 add_executable(dan_tester src/dan_tester.cpp)
 target_link_libraries(
@@ -144,3 +162,17 @@ target_link_libraries(
   lar_comau_commons
 )
 add_dependencies(gripper_test_novembre ${PROJECT_NAME}_generate_messages_cpp)
+
+
+
+if(Boost_FOUND)
+  #NODE - Comau Bridge UDP
+  add_executable(comau_bridge_udp src/comau_bridge_udp.cpp)
+  target_link_libraries(
+    comau_bridge_udp
+    ${catkin_LIBRARIES}
+    ${Boost_LIBRARIES}
+    lar_tools
+    lar_comau_commons
+  )
+endif()
