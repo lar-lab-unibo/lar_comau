@@ -88,7 +88,7 @@ bool feedback_ready = false;
 
 
 bool activeCondition(){
-    return receive_node->isReady() && send_node->isReady() && nh->ok();
+        return receive_node->isReady() && send_node->isReady() && nh->ok();
 }
 
 /**
@@ -114,16 +114,20 @@ void receiveFromGui() {
 void broadcastTFs(){
 
         while(activeCondition()) {
+                if(feedback_ready) {
+                        //POSE PUBLISHER
+                        cartesian_publisher.publish(current_robot_state.pose);
 
-                tf::Transform t06;
-                lar_tools::geometrypose_to_tf(current_robot_state.pose,t06);
-                tf_broadcaster->sendTransform(tf::StampedTransform(t06, ros::Time::now(), "base", "comau_t06"));
+                        //WRIST TF
+                        tf::Transform t06;
+                        lar_tools::geometrypose_to_tf(current_robot_state.pose,t06);
+                        tf_broadcaster->sendTransform(tf::StampedTransform(t06, ros::Time::now(), "base", "comau_t06"));
 
-
-                tf::Transform t0BM;
-                tf::poseKDLToTF (robot->base_marker, t0BM);
-                tf_broadcaster->sendTransform(tf::StampedTransform(t0BM, ros::Time::now(), "base", "comau_t_0_base_marker"));
-
+                        //BASE MARKER TF
+                        tf::Transform t0BM;
+                        tf::poseKDLToTF (robot->base_marker, t0BM);
+                        tf_broadcaster->sendTransform(tf::StampedTransform(t0BM, ros::Time::now(), "base", "comau_t_0_base_marker"));
+                }
                 boost::this_thread::sleep(boost::posix_time::milliseconds(50));
         }
 
@@ -213,7 +217,7 @@ main(int argc, char** argv) {
         /* NODES */
         joints_publisher = nh->advertise<sensor_msgs::JointState>("/lar_comau/comau_joint_state_publisher", 1);
         joints_state = nh->subscribe( "/lar_comau/comau_joint_states",1,jointStateReceived );
-        cartesian_publisher = nh->advertise<lar_comau::ComauState>("lar_comau/comau_full_state_publisher", 1);
+        cartesian_publisher = nh->advertise<geometry_msgs::Pose>("lar_comau/comau_full_state_publisher", 1);
         tf_broadcaster= new tf::TransformBroadcaster;
         initializeJointState(joint_state_setpoint);
 
@@ -243,6 +247,7 @@ main(int argc, char** argv) {
 
                         std::cout << "llop\n";
                         joints_publisher.publish(joint_state_setpoint);
+
                 }
 
                 ros::spinOnce();
