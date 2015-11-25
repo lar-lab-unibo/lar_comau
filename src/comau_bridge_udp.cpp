@@ -129,6 +129,7 @@ void broadcastTFs(){
                         tf_broadcaster->sendTransform(tf::StampedTransform(t0BM, ros::Time::now(), "base", "comau_t_0_base_marker"));
                 }
                 boost::this_thread::sleep(boost::posix_time::milliseconds(50));
+                ros::spinOnce();
         }
 
 }
