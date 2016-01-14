@@ -125,7 +125,7 @@ void receiveFromGui() {
 
                 //RECEIVE
                 receive_node->receive((void*)&receive_message,sizeof(receive_message));
-
+                ROS_INFO("Received Message with Command: %d",receive_message.command);
                 //
                 if(receive_message.command==COMMAND_RECEIVED_JOINTS) {
                         ROS_INFO("Received Joints Command from GUI");
