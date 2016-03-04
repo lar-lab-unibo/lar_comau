@@ -158,7 +158,7 @@ void receiveFromGui() {
                                  receive_message.payload[2],
                                  receive_message.payload[3],
                                  receive_message.payload[4]
-                               );
+                                 );
 
                         T_0_TARGET = Eigen::Matrix4d::Identity();
                         T_0_TARGET(0,3) = receive_message.payload[0];
@@ -178,11 +178,11 @@ void receiveFromGui() {
                         T_0_TARGETAPPROACH = T_0_TARGETAPPROACH*T_TARGET_ZENI;
                         T_0_TARGETAPPROACH = T_0_TARGETAPPROACH*T_TARGET_DISTANCE;
                         T_0_TARGETAPPROACH = T_0_TARGETAPPROACH*T_TARGET_ROLL;
-                        if(send>0){
-                          eigen_4x4_to_geometrypose_d(T_0_TARGETAPPROACH,pose_setpoint);
-                          pose_setpoint.position.x *=1000.0;
-                          pose_setpoint.position.y *=1000.0;
-                          pose_setpoint.position.z *=1000.0;
+                        if(send>0) {
+                                eigen_4x4_to_geometrypose_d(T_0_TARGETAPPROACH,pose_setpoint);
+                                pose_setpoint.position.x *=1000.0;
+                                pose_setpoint.position.y *=1000.0;
+                                pose_setpoint.position.z *=1000.0;
 
                         }
                         got_target = true;
@@ -259,15 +259,15 @@ void broadcastTFs(){
                                 tf_broadcaster->sendTransform(tf::StampedTransform(t6camera, ros::Time::now(), "comau_t06", "comau_t_6_camera"));
                         }
 
-                        if(got_target){
-                            tf::Transform t0target,t0targetapproach;
-                            lar_tools::eigen_4x4_d_to_tf(T_0_TARGET,t0target);
-                            lar_tools::eigen_4x4_d_to_tf(T_0_TARGETAPPROACH,t0targetapproach);
-                            tf_broadcaster->sendTransform(tf::StampedTransform(t0target, ros::Time::now(), "base", "comau_t0target"));
-                            tf_broadcaster->sendTransform(tf::StampedTransform(t0targetapproach, ros::Time::now(), "base", "comau_t0targetapproach"));
+                        if(got_target) {
+                                tf::Transform t0target,t0targetapproach;
+                                lar_tools::eigen_4x4_d_to_tf(T_0_TARGET,t0target);
+                                lar_tools::eigen_4x4_d_to_tf(T_0_TARGETAPPROACH,t0targetapproach);
+                                tf_broadcaster->sendTransform(tf::StampedTransform(t0target, ros::Time::now(), "base", "comau_t0target"));
+                                tf_broadcaster->sendTransform(tf::StampedTransform(t0targetapproach, ros::Time::now(), "base", "comau_t0targetapproach"));
                         }
                 }
-                boost::this_thread::sleep(boost::posix_time::milliseconds(50));
+                boost::this_thread::sleep(boost::posix_time::milliseconds(1));
 
         }
 
@@ -325,13 +325,18 @@ main(int argc, char** argv) {
         use_camera = true;
         // Grabby Gripper Camera
         // Note that YAW value is opposed due to DETECTION ERROR //TODO: find why?
-        lar_tools::create_eigen_4x4_d(0.061,-0.0094,-0.1488,179.0 * M_PI/180.0f,0,89.5 * M_PI/180.0f,T_6_CAMERA);
+
+        //CRABBY GRIPPER V0
+        //lar_tools::create_eigen_4x4_d(0.061,-0.0094,-0.1488,179.0 * M_PI/180.0f,0,89.5 * M_PI/180.0f,T_6_CAMERA);
+
+        //TRIPOD GRIPPER V2
+        lar_tools::create_eigen_4x4_d(-0.091,0.02,-0.155,179.5 * M_PI/180.0f,0.5 * M_PI/180.0f,-88.7 * M_PI/180.0f,T_6_CAMERA);
 
         /* ROBOT */
         std::string robot_desc_string;
         nh->param("robot_description", robot_desc_string, std::string());
         robot = new lar_comau::ComauSmartSix(robot_desc_string,"base_link", "link6");
-        robot->setBaseMarker(0.155f+0.008f,0.0f,-0.450f-0.100f-0.001f,0.0f,PI/2.0f,-PI/2.0);
+        robot->setBaseMarker(0.155f+0.008f,0.0f,-0.450f-0.100f-0.001f,0.0f,PI/2.0f,-PI);
 
         /* UDP NODE*/
         ROS_INFO("UDP Node creating...");
@@ -389,7 +394,7 @@ main(int argc, char** argv) {
 
 
 
-                                        std::cout << pose_setpoint<<std::endl;
+                                        //std::cout << pose_setpoint<<std::endl;
                                         int c = robot->ik(
                                                 pose_setpoint.position.x,
                                                 pose_setpoint.position.y,

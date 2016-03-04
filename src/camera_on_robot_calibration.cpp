@@ -140,6 +140,8 @@ main (int argc, char** argv)
 
                         br.sendTransform(tf::StampedTransform(t_6_cam, ros::Time::now(), "comau_t06", "comau_t0CAM"));
 
+                        
+
                 }
                 catch (tf::TransformException ex) {
                         ROS_ERROR("%s",ex.what());
