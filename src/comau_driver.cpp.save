@@ -85,7 +85,7 @@ ros::Publisher joint_state_pub;
 void *assignSetPoint(void*) {
 
 	int arg_c;
-	char **arg_v;
+	occuchar **arg_v;
 
 	ros::init( arg_c,arg_v,"ComauJointStatePublisher" );
 
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 								for (int i = 0; i < 6; i++){
 									if (sinAxisEnabled[i]) {
 										arrayToSimulink[i]=getGears[i];
-										Speed[i]=double(txRate[i])*double(c4gOpen.getActualVelocity(ARM,i+1));///360.0;
+										Speed[i]=(double)+txRate[i]*(c4gOpen.getActualVelocity(ARM,i+1))/360;
 										arrayToSimulink[i+6]=Speed[i];
 										if ((Speed[i]) >= 0.00005 || (Speed[i]) <= -0.00005 ) IS_NOT_ANY_AXIS_MOVING=0.0;
 									}// END if (sinAxisEnabled[i])
@@ -347,12 +347,12 @@ int main(int argc, char *argv[])
 								}*/// END if (size == -1)
 
 								actual_joint_state.header.stamp = ros::Time::now();
-								actual_joint_state.position[0]= getGears[0]*M_PI/180.0;
-								actual_joint_state.position[1]= getGears[1]*M_PI/180.0;
-								actual_joint_state.position[2]= getGears[2]*M_PI/180.0;
-								actual_joint_state.position[3]= getGears[3]*M_PI/180.0;
-								actual_joint_state.position[4]= getGears[4]*M_PI/180.0;
-								actual_joint_state.position[5]= getGears[5]*M_PI/180.0;
+								actual_joint_state.position[0]= getGears[0];
+								actual_joint_state.position[1]= getGears[1];
+								actual_joint_state.position[2]= getGears[2];
+								actual_joint_state.position[3]= getGears[3];
+								actual_joint_state.position[4]= getGears[4];
+								actual_joint_state.position[5]= getGears[5];
 
 								actual_joint_state.velocity[0]= Speed[0];
 								actual_joint_state.velocity[1]= Speed[1];

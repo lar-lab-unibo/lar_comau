@@ -37,9 +37,12 @@ find_package(catkin REQUIRED COMPONENTS
 
 
 #Lar Tools
-MESSAGE("###### LAR_TOOLS ########")
-find_package(lar_tools)
-include_directories(${lar_tools_INCLUDE_DIRS})
+OPTION(USE_LAR_TOOLS "Use lar tools library" OFF)
+if(USE_LAR_TOOLS)
+  MESSAGE("###### LAR_TOOLS ########")
+  find_package(lar_tools)
+  include_directories(${lar_tools_INCLUDE_DIRS})
+endif()
 
 #Boost
 FIND_PACKAGE( Boost )
@@ -164,15 +167,16 @@ target_link_libraries(
 add_dependencies(gripper_test_novembre ${PROJECT_NAME}_generate_messages_cpp)
 
 
-
-if(Boost_FOUND)
-  #NODE - Comau Bridge UDP
-  add_executable(comau_bridge_udp src/comau_bridge_udp.cpp)
-  target_link_libraries(
-    comau_bridge_udp
-    ${catkin_LIBRARIES}
-    ${Boost_LIBRARIES}
-    lar_tools
-    lar_comau_commons
-  )
+if(USE_LAR_TOOLS)
+  if(Boost_FOUND)
+    #NODE - Comau Bridge UDP
+    add_executable(comau_bridge_udp src/comau_bridge_udp.cpp)
+    target_link_libraries(
+      comau_bridge_udp
+      ${catkin_LIBRARIES}
+      ${Boost_LIBRARIES}
+      lar_tools
+      lar_comau_commons
+    )
+  endif()
 endif()

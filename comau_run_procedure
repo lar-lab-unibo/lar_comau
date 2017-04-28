@@ -1,0 +1,17 @@
+su
+loadRTAI 
+loadRTnet
+
+
+# launcher del driver
+roslaunch lar_comau comau_server.launch model:=src/lar_comau/urdf/comau_smart_6.urdf
+
+
+
+#Programmi PDL2
+* 'mod52' (MODALITA 5 Assoluta): lanciare dopo il DRIVE ON per iniziare la comunicazione col server
+* 'mod5' (MODALITA 5 Relativa): boh..
+* 'mod504' Chiudere la comunicazione ed il server
+* 'mod_serverRestart' per riavviare il server dopo la chiusura con il mod504
+*
+
