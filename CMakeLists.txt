@@ -178,6 +178,7 @@ target_link_libraries(
 add_dependencies(gripper_test_novembre ${PROJECT_NAME}_generate_messages_cpp)
 
 
+
 if(USE_LAR_TOOLS)
   if(Boost_FOUND)
     #NODE - Comau Bridge UDP
@@ -189,5 +190,29 @@ if(USE_LAR_TOOLS)
       lar_tools
       lar_comau_commons
     )
-  endif()
-endif()
+  endif(Boost_FOUND)
+
+#NODE - Camera On Robot Calibration
+add_executable(camera_on_robot_calibration src/camera_on_robot_calibration.cpp)
+target_link_libraries(
+  camera_on_robot_calibration
+  ${catkin_LIBRARIES}
+  lar_tools
+  lar_comau_commons
+)
+add_dependencies(camera_on_robot_calibration ${PROJECT_NAME}_generate_messages_cpp)
+
+
+  if(Boost_FOUND)
+    #NODE - Comau Bridge UDP
+    add_executable(comau_bridge_udp src/comau_bridge_udp.cpp)
+    target_link_libraries(
+      comau_bridge_udp
+      ${catkin_LIBRARIES}
+      ${Boost_LIBRARIES}
+      lar_tools
+      lar_comau_commons
+    )
+  endif(Boost_FOUND)
+
+endif(USE_LAR_TOOLS)

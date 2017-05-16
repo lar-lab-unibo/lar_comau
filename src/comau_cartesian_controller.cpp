@@ -100,17 +100,17 @@ void buildJointStateForComau(sensor_msgs::JointState& msg, float* q){
         msg.name.resize(6);
         msg.position.resize(6);
         msg.name[0] ="base_to_link1";
-        msg.position[0]=q[0];
+        msg.position[0]=q[0]*180.0f/M_PI;
         msg.name[1] ="link1_to_link2";
-        msg.position[1]=q[1];
+        msg.position[1]=q[1]*180.0f/M_PI;
         msg.name[2] ="link2_to_link3";
-        msg.position[2]=q[2];
+        msg.position[2]=q[2]*180.0f/M_PI;
         msg.name[3] ="link3_to_link4";
-        msg.position[3]=q[3];
+        msg.position[3]=q[3]*180.0f/M_PI;
         msg.name[4] ="link4_to_link5";
-        msg.position[4]=q[4];
+        msg.position[4]=q[4]*180.0f/M_PI;
         msg.name[5] ="link5_to_link6";
-        msg.position[5]=q[5];
+        msg.position[5]=q[5]*180.0f/M_PI;
 }
 
 /**
@@ -414,6 +414,6 @@ int main(int argc, char *argv[])
 
                 ros::spinOnce();
         }
-        
+
         return 0;
 }
