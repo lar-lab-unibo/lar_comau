@@ -1,5 +1,9 @@
 <launch>
 	<arg name="model" />
 	<param name="robot_description" textfile="$(arg model)" />
-	<node name="comau_driver" pkg="lar_comau" type="comau_driver" output="screen" />
+    <param name="COMAU_NAME" value="comau_smart_six"/>
+	<node name="comau_driver_new" pkg="lar_comau" type="comau_driver_new" output="screen" />
+
+
+
 </launch>
