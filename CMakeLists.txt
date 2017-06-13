@@ -61,6 +61,7 @@ add_message_files(
  FILES
  ComauState.msg
  ComauCommand.msg
+ MachineAlarmStatus.msg
 )
 
 generate_messages(

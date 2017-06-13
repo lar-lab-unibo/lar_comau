@@ -1,0 +1,13 @@
+<launch>
+
+	<arg name="robot_name" default="comau_smart_six"/>
+    <param name="COMAU_NAME" value="comau_smart_six"/>
+      
+    <group ns="$(arg robot_name)">	
+	
+        <param name="robot_description" command="$(find xacro)/xacro.py '$(find lar_comau)/urdf/comau_smart_six.urdf.xacro'"/>	
+        <node name="comau_driver_new" pkg="lar_comau" type="comau_driver_new" output="screen" />
+           
+    </group>
+
+</launch>

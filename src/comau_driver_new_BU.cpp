@@ -24,7 +24,6 @@
 
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
-#include "lar_comau/MachineAlarmStatus.h"
 
 #define ROBOT_CONTROLLER_PUBLISHER_NAME "joint_states"
 #define ROBOT_CONTROLLER_SUBSCRIBER_NAME "joint_command"
@@ -38,14 +37,8 @@ bool startServer;
 bool serverActive;
 bool IS_AXIS_SELECTED[6];
 bool AXIS_ENABLED[6];
-
-bool wasGoing = true;
-bool wasGoing_old = true;
-
 double setPoint[6] = {0, 0, 0, 0, 0, 0};
 double getGears[6] = {1, 1, 0, 0, 0, 0};
-double Speed[6];
-
 //FILTER VARS
 double Z[6][4] = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
 double B[6][10];
@@ -93,7 +86,6 @@ void jCallback(const sensor_msgs::JointState &msg)
 }
 
 ros::Publisher joint_state_pub;
-ros::Publisher comau_alarm_pub;
 string robot_name = "comau_smart_six";
 
 void *assignSetPoint(void *)
@@ -106,8 +98,6 @@ void *assignSetPoint(void *)
 
 	ros::NodeHandle n;
 
-	ros::Rate loop_rate(500);
-
 	string parameter;
 	if (ros::param::get("COMAU_NAME", parameter))
 		robot_name = parameter;
@@ -118,67 +108,10 @@ void *assignSetPoint(void *)
 	ros::Subscriber sub = n.subscribe(joint_command_topic, 1, jCallback);
 	joint_state_pub = n.advertise<sensor_msgs::JointState>(joint_state_topic, 1);
 
-	// alarm publisher
-	string comau_alarm_topic = "/" + robot_name + "/alarm";
-	comau_alarm_pub = n.advertise<lar_comau::MachineAlarmStatus>(comau_alarm_topic, 1);
-
-	/** ROS JOINT MESSAGE */
-	sensor_msgs::JointState actual_joint_state;
-	actual_joint_state.name.resize(6);
-	actual_joint_state.position.resize(6);
-	actual_joint_state.velocity.resize(6);
-	actual_joint_state.name[0] = robot_name + "/" + "base_to_link1";
-	actual_joint_state.name[1] = robot_name + "/" + "link1_to_link2";
-	actual_joint_state.name[2] = robot_name + "/" + "link2_to_link3";
-	actual_joint_state.name[3] = robot_name + "/" + "link3_to_link4";
-	actual_joint_state.name[4] = robot_name + "/" + "link4_to_link5";
-	actual_joint_state.name[5] = robot_name + "/" + "link5_to_link6";
-
-	lar_comau::MachineAlarmStatus current_alarm;	
-	current_alarm.type = lar_comau::MachineAlarmStatus::ALARM_NONE;
-	current_alarm.reset_required = false;
-	comau_alarm_pub.publish(current_alarm);
-
-	while (ros::ok())
+	while (true)
 	{
 
-		actual_joint_state.header.stamp = ros::Time::now();
-		actual_joint_state.position[0] = getGears[0] * M_PI / 180.0;
-		actual_joint_state.position[1] = getGears[1] * M_PI / 180.0;
-		actual_joint_state.position[2] = getGears[2] * M_PI / 180.0;
-		actual_joint_state.position[3] = getGears[3] * M_PI / 180.0;
-		actual_joint_state.position[4] = getGears[4] * M_PI / 180.0;
-		actual_joint_state.position[5] = getGears[5] * M_PI / 180.0;
-
-		actual_joint_state.velocity[0] = Speed[0];
-		actual_joint_state.velocity[1] = Speed[1];
-		actual_joint_state.velocity[2] = Speed[2];
-		actual_joint_state.velocity[3] = Speed[3];
-		actual_joint_state.velocity[4] = Speed[4];
-		actual_joint_state.velocity[5] = Speed[5];
-
-		joint_state_pub.publish(actual_joint_state);
-
-
-		if (wasGoing_old && !wasGoing)
-				{
-						current_alarm.type = lar_comau::MachineAlarmStatus::ALARM_UNKNOWN;
-						current_alarm.reset_required = true;
-						comau_alarm_pub.publish(current_alarm);/* code */
-				}	
-
-		if (!wasGoing_old && wasGoing)
-				{
-						current_alarm.type = lar_comau::MachineAlarmStatus::ALARM_NONE;
-						current_alarm.reset_required = false;
-						comau_alarm_pub.publish(current_alarm);/* code */
-				}	
-
-		wasGoing_old = wasGoing;
-
-
-		ros::spinOnce();
-		loop_rate.sleep();
+		ros::spin();
 	}
 
 	return NULL;
@@ -280,9 +213,22 @@ int main(int argc, char *argv[])
 		}	 // END for (int i = 0; i < 6; i++)
 
 		bool keepGoingOn = true;
+		bool wasGoing = true;
 		bool init[6] = {1, 1, 1, 1, 1, 1};
 
 		int val;
+
+		/** ROS JOINT MESSAGE */
+		sensor_msgs::JointState actual_joint_state;
+		actual_joint_state.name.resize(6);
+		actual_joint_state.position.resize(6);
+		actual_joint_state.velocity.resize(6);
+		actual_joint_state.name[0] = robot_name + "/" + "base_to_link1";
+		actual_joint_state.name[1] = robot_name + "/" + "link1_to_link2";
+		actual_joint_state.name[2] = robot_name + "/" + "link2_to_link3";
+		actual_joint_state.name[3] = robot_name + "/" + "link3_to_link4";
+		actual_joint_state.name[4] = robot_name + "/" + "link4_to_link5";
+		actual_joint_state.name[5] = robot_name + "/" + "link5_to_link6";
 
 		while (keepGoingOn)
 		{
@@ -311,27 +257,26 @@ int main(int argc, char *argv[])
 									if (init[i])
 									{
 										//Get actual config at init
-										calibCONSTANTS[i] = c4gOpen.getCalibrationConstant(ARM, i + 1) * 360 / txRate[i];
-										initialPositions[i] = c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i] - calibCONSTANTS[i];
-										setPoint[i] = initialPositions[i];
+										initialPositions[i] = c4gOpen.getActualPosition(ARM, i + 1);
 										previousPositions[i] = initialPositions[i];
 										deltaPositions[i] = 0.0;
 										init[i] = false;
 										cout << "-> c4g: ASSE " << i + 1 << " CONNESSO.\n";
-									
-										Z[i][3] = initialPositions[i];
-										Z[i][2] = initialPositions[i];
-										Z[i][1] = initialPositions[i];
-										Z[i][0] = initialPositions[i];
+										calibCONSTANTS[i] = c4gOpen.getCalibrationConstant(ARM, i + 1);
+
+										Z[i][3] = (initialPositions[i] * 360.0 / txRate[i]);
+										Z[i][2] = (initialPositions[i] * 360.0 / txRate[i]);
+										Z[i][1] = (initialPositions[i] * 360.0 / txRate[i]);
+										Z[i][0] = (initialPositions[i] * 360.0 / txRate[i]);
 
 										//setPoint[i]=((initialPositions[i])*360/txRate[i]);;
-										cout << "   Posizione iniziale " << i + 1 << ": " << initialPositions[i] << "\n";
-										cout << "         Calibrazione " << i + 1 << ": " << calibCONSTANTS[i] << "\n";
+										cout << "   Posizione iniziale " << i + 1 << ": " << (initialPositions[i] * 360 / txRate[i]) << "\n";
+										cout << "         Calibrazione " << i + 1 << ": " << (calibCONSTANTS[i] * 360 / txRate[i]) << "\n";
 									} // END if (init[i])
 									else
 										al = 1;
 
-									getGears[i] =  c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i] - calibCONSTANTS[i] ;
+									getGears[i] = -calibCONSTANTS[i] * 360.0 / txRate[i] + c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i];
 
 									if (al == 1)
 									{
@@ -353,8 +298,8 @@ int main(int argc, char *argv[])
 										cout << " \n ALERT: SETPOINT AXIS " << i + 1 << ": OVER SUP OP.LIMIT.\n";
 									} // END if (setPoint[i]>OP_LIM[i][1])
 									//////////
-									//double realNextPoint = setPoint[i] ;
-									double lastDeg = previousPositions[i];
+									//double realNextPoint = setPoint[i] + ((calibCONSTANTS[i])*360.0/txRate[i]);
+									double lastDeg = previousPositions[i] * 360.0 / txRate[i] - calibCONSTANTS[i] * 360.0 / txRate[i];
 
 									//Operative virtual limit control
 									bool virtual_limit_control = false;
@@ -409,7 +354,7 @@ int main(int argc, char *argv[])
 									if (allowMotion)
 									{
 										//FILTER 2nd order
-										X = setPoint[i];
+										X = setPoint[i] + ((calibCONSTANTS[i]) * 360.0 / txRate[i]);
 										Acc = X * B0 + Z[i][0] * B1 + Z[i][1] * B2 - Z[i][2] * A1 - Z[i][3] * A2;
 										Z[i][3] = Z[i][2];
 										Z[i][2] = Acc;
@@ -433,7 +378,7 @@ int main(int argc, char *argv[])
 											cout << " \n ALERT: FILTERED GEAR AXIS " << i + 1 << ": OVER SUP OP.LIMIT.\n";
 										} // END if (gearDeg[i]>OP_LIM[i][1])
 
-										GearRotations[i] = +gearDeg[i];
+										GearRotations[i] = +txRate[i] * gearDeg[i] / 360.0;
 									} // END if (allowMotion)
 								}	 // END if (sinAxisEnabled[i])
 							}		  // END for (int i = 0; i < 6; i++)
@@ -444,7 +389,7 @@ int main(int argc, char *argv[])
 
 							double arrayToSimulink[13];
 							double IS_NOT_ANY_AXIS_MOVING = 1.0;
-
+							double Speed[6];
 							for (int i = 0; i < 6; i++)
 							{
 								if (sinAxisEnabled[i])
@@ -465,7 +410,22 @@ int main(int argc, char *argv[])
 									exit(1);
 								}*/ // END if (size == -1)
 
-							/*** ROS was here ***/
+							actual_joint_state.header.stamp = ros::Time::now();
+							actual_joint_state.position[0] = getGears[0] * M_PI / 180.0;
+							actual_joint_state.position[1] = getGears[1] * M_PI / 180.0;
+							actual_joint_state.position[2] = getGears[2] * M_PI / 180.0;
+							actual_joint_state.position[3] = getGears[3] * M_PI / 180.0;
+							actual_joint_state.position[4] = getGears[4] * M_PI / 180.0;
+							actual_joint_state.position[5] = getGears[5] * M_PI / 180.0;
+
+							actual_joint_state.velocity[0] = Speed[0];
+							actual_joint_state.velocity[1] = Speed[1];
+							actual_joint_state.velocity[2] = Speed[2];
+							actual_joint_state.velocity[3] = Speed[3];
+							actual_joint_state.velocity[4] = Speed[4];
+							actual_joint_state.velocity[5] = Speed[5];
+
+							joint_state_pub.publish(actual_joint_state);
 
 							//cout << "Sample Time: "<<sampleTime<<endl;
 							for (int i = 0; i < 6; i++)
@@ -490,13 +450,13 @@ int main(int argc, char *argv[])
 									}	 // END if (c4gOpen.isInDriveOn(ARM))
 									else if (wasGoing)
 									{
-										cout << "Alarm --> DRIVE OFF.\n\n Error:" << c4gOpen.getLastError() << "\n Mode: " << c4gOpen.getMode(ARM) << endl;
+										cout << "Allarm --> DRIVE OFF.\n\n Error:" << c4gOpen.getLastError() << "Mode: " << c4gOpen.getMode(ARM) << endl;
 										cout.flush();
-
+										c4gOpen.resetError();
 										wasGoing = false;
 									}
-									c4gOpen.setTargetPosition(ARM, i + 1, (actualPositions[i] + calibCONSTANTS[i]) * txRate[i] / 360.0);
-									c4gOpen.setTargetVelocity(ARM, i + 1, deltaPositions[i] * txRate[i] / 360.0);
+									c4gOpen.setTargetPosition(ARM, i + 1, actualPositions[i]);
+									c4gOpen.setTargetVelocity(ARM, i + 1, deltaPositions[i]);
 									//cout << i << " pos: "<<actualPositions[i]<< " set;" << setPoint[i]*txRate[i]/360.0f+calibCONSTANTS[i] <<" tx: "<<txRate[i]<< " vel: "<<deltaPositions[i]<<std::endl;
 
 								} // END if (sinAxisEnabled[i])

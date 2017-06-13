@@ -1,7 +1,7 @@
 <launch>
 
 	<arg name="robot_name" default="comau_smart_six"/>
-    <param name="COMAU_NAME" value="comau_smart_six"/>
+    <param name="COMAU_NAME" value="$(arg robot_name)"/>
       
     <group ns="$(arg robot_name)">	
 	

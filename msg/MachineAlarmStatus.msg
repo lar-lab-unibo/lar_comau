@@ -1,0 +1,11 @@
+int8 type
+bool reset_required
+
+int8 ALARM_NONE = 0
+int8 ALARM_UNKNOWN = -100
+int8 ALARM_BARRIER = -1
+int8 ALARM_FOLLOWING = -2
+int8 ALARM_POWER = -3
+int8 ALARM_USER = -4
+int8 ALARM_EMERGENCY = -5
+int8 ALARM_EXIT_OPEN = -6

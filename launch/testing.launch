@@ -1,0 +1,6 @@
+<launch>
+
+    <!-- STATIC TF PUBLISHER NODES -->
+    <node pkg="tf" type="static_transform_publisher" name="tool_broadcaster" args="0.2 0.3 0.5 0 0 0 1 comau_smart_six/link6 comau_smart_six/tool 10"/>
+</launch>
+
