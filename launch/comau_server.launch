@@ -2,7 +2,7 @@
 	<arg name="model" />
 	<param name="robot_description" textfile="$(arg model)" />
     <param name="COMAU_NAME" value="comau_smart_six"/>
-	<node name="comau_driver_new" pkg="lar_comau" type="comau_driver_new" output="screen" />
+	<node name="comau_driver_working" pkg="lar_comau" type="comau_driver_working" output="screen" />
 
 
 

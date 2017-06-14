@@ -24,7 +24,7 @@
 
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
-#include "lar_comau/MachineAlarmStatus.h"
+#include "std_msgs/String.h"
 
 #define ROBOT_CONTROLLER_PUBLISHER_NAME "joint_states"
 #define ROBOT_CONTROLLER_SUBSCRIBER_NAME "joint_command"
@@ -33,7 +33,7 @@
 
 bool setpoint_in_deg = true;
 double mesg[7];
-bool allowMotion = false;
+bool allowMotion = 0;
 bool startServer;
 bool serverActive;
 bool IS_AXIS_SELECTED[6];
@@ -43,7 +43,7 @@ bool wasGoing = true;
 bool wasGoing_old = true;
 
 double setPoint[6] = {0, 0, 0, 0, 0, 0};
-double getGears[6] = {0, 0, 0, 0, 0, 0};
+double getGears[6] = {1, 1, 0, 0, 0, 0};
 double Speed[6];
 
 //FILTER VARS
@@ -56,26 +56,7 @@ double Fs, Q, W, N, B0, B1, B2, A1, A2;
 double FcMax = 0.5;
 double FcMin = 0.1;
 double threshold[6] = {10, 10, 10, 30, 15, 30};
-
-double initialPositions[6];
-
-double calibCONSTANTS[6];
-
-bool init[6] = {1, 1, 1, 1, 1, 1};
-bool sinAxisEnabled[6];
-
-
-double OP_LIM[6][2] = {{-170, 170}, {-85, 175}, {-170, 0}, {-210, 210}, {-130, 130}, {-2700, 2700}};
-double VT_LIM[6][2] = {{-170, 170}, {-85, 175}, {-170, 0}, {-210, 210}, {-100, 100}, {-800, 800}};
-
-/* joint position variation limit */
-double DPOS_LIM[6] = {10, 10, 10, 10, 10, 10};
-
-double actualPositions[6];
-double previousPositions[6];
-double deltaPositions[6];
-
-lar_comau::MachineAlarmStatus current_state;	
+int al = 0;
 
 using namespace std;
 
@@ -97,7 +78,8 @@ void jCallback(const sensor_msgs::JointState &msg)
 
 	double degreeSetPoint;
 
-	while (!allowMotion);
+	while (al == 0)
+		;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -107,104 +89,11 @@ void jCallback(const sensor_msgs::JointState &msg)
 		// 	degreeSetPoint=(msg.position[i]*180.0f)/M_PI;
 		// }
 		setPoint[i] = (msg.position[i] * 180.0f) / M_PI;
-
-		//Operative limit control
-		if (setPoint[i] < OP_LIM[i][0])
-		{
-			//allowMotion=0;
-			setPoint[i] = OP_LIM[i][0];
-			current_state.alarm |= lar_comau::MachineAlarmStatus::ALARM_SETPOINT_LIMIT;
-
-			ROS_INFO("ALERT: SETPOINT AXIS %d UNDER LOWER OP.LIMIT", i + 1);
-		} // END if (setPoint[i]<OP_LIM[i][0])
-		else {
-			current_state.alarm &= ~lar_comau::MachineAlarmStatus::ALARM_SETPOINT_LIMIT;
-
-		}
-
-		if (setPoint[i] > OP_LIM[i][1])
-		{
-			//allowMotion=0;
-			setPoint[i] = OP_LIM[i][1];
-			current_state.alarm |= lar_comau::MachineAlarmStatus::ALARM_SETPOINT_LIMIT;
-
-			ROS_INFO("ALERT: SETPOINT AXIS %d OVER UPPER OP.LIMIT", i + 1);
-		} // END if (setPoint[i]>OP_LIM[i][1])
-		else {
-			current_state.alarm &= ~lar_comau::MachineAlarmStatus::ALARM_SETPOINT_LIMIT;
-
-		}
-
-
-		if (abs(setPoint[i] - getGears[i]) > DPOS_LIM[i])
-		{
-			//allowMotion=0;
-			//setPoint[i] = getGears[i];
-			current_state.alarm |= lar_comau::MachineAlarmStatus::ALARM_DISTANCE_LIMIT;
-
-			ROS_INFO("ALERT: SETPOINT DISTENCE ON AXIS %d OVER OP.LIMIT", i + 1);
-		} // END if (setPoint[i]<OP_LIM[i][0])
-		else {
-			current_state.alarm &= ~lar_comau::MachineAlarmStatus::ALARM_DISTANCE_LIMIT;
-
-		}
-		//double realNextPoint = setPoint[i] ;
-		double lastDeg = previousPositions[i];
-
-		//Operative virtual limit control
-		bool virtual_limit_control = false;
-		if (virtual_limit_control)
-		{
-			if (setPoint[i] < (VT_LIM[i][0]))
-			{
-				setPoint[i] = VT_LIM[i][0];
-				ROS_INFO(" \n Reset Forzato+ %d", i + 1);
-			}
-
-			if (setPoint[i] <= (VT_LIM[i][0] + 1) && lastDeg <= (VT_LIM[i][0] + 1) && lastDeg > setPoint[i])
-			{
-				double proximity = abs(VT_LIM[i][0] - lastDeg);
-				if (proximity <= 0)
-					proximity = 0;
-				if (proximity >= 1)
-					proximity = 1;
-				double corrective = pow((proximity / 1), 2);
-				if (corrective > 1)
-					corrective = 1;
-				setPoint[i] = lastDeg - corrective * abs(setPoint[i] - lastDeg);
-			} // END if (setPoint[i]<=(VT_LIM[i][0]+1) ...
-
-			if (setPoint[i] > (VT_LIM[i][1]))
-			{
-				setPoint[i] = VT_LIM[i][1];
-				ROS_INFO(" \n Reset Forzato+ %d", i + 1);
-			} // END if (setPoint[i]>(VT_LIM[i][1]))
-
-			//if (i==4) cout << " Proximity+ "<<i+1 <<": "<<(VT_LIM[i][1]-lastDeg)<<"\n";
-
-			if (setPoint[i] >= (VT_LIM[i][1] - 1) && lastDeg >= (VT_LIM[i][1] - 1) && lastDeg < setPoint[i])
-			{
-				double proximity = abs(VT_LIM[i][1] - lastDeg);
-				if (proximity <= 0)
-					proximity = 0;
-				if (proximity >= 1)
-					proximity = 1;
-				double corrective = pow((proximity / 1), 2);
-				if (corrective > 1)
-					corrective = 1;
-				setPoint[i] = lastDeg + corrective * abs(setPoint[i] - lastDeg);
-			} // END if (setPoint[i]>=(VT_LIM[i][1]-1) ...
-		}
-		//////////
-		//cout << "\n allowMotion = " << allowMotion << " \n";
-		//for (int h = 0; h < 6; h++) {
-		//	cout << "\nsetPoint[" << h << "] = " << setPoint[h] << "\n";
-		//}
 	}
 }
 
 ros::Publisher joint_state_pub;
-ros::Publisher comau_state_pub;
+ros::Publisher comau_alarm_pub;
 string robot_name = "comau_smart_six";
 
 void *assignSetPoint(void *)
@@ -230,8 +119,8 @@ void *assignSetPoint(void *)
 	joint_state_pub = n.advertise<sensor_msgs::JointState>(joint_state_topic, 1);
 
 	// alarm publisher
-	string comau_state_topic = "/" + robot_name + "/alarm";
-	comau_state_pub = n.advertise<lar_comau::MachineAlarmStatus>(comau_state_topic, 1);
+	string comau_alarm_topic = "/" + robot_name + "/alarm";
+	comau_alarm_pub = n.advertise<std_msgs::String>(comau_alarm_topic, 1);
 
 	/** ROS JOINT MESSAGE */
 	sensor_msgs::JointState actual_joint_state;
@@ -245,72 +134,45 @@ void *assignSetPoint(void *)
 	actual_joint_state.name[4] = robot_name + "/" + "link4_to_link5";
 	actual_joint_state.name[5] = robot_name + "/" + "link5_to_link6";
 
-	current_state.state = lar_comau::MachineAlarmStatus::STATE_INIT;
-	ROS_INFO("comau_driver: robot not initialized");
-
-	current_state.alarm = lar_comau::MachineAlarmStatus::ALARM_NONE;
-	current_state.reset_required = false;
+	std_msgs::String current_alarm;	
+	current_alarm.data = "ALARM_NONE";
+	comau_alarm_pub.publish(current_alarm);
 
 	while (ros::ok())
 	{
 
 		actual_joint_state.header.stamp = ros::Time::now();
+		actual_joint_state.position[0] = getGears[0] * M_PI / 180.0;
+		actual_joint_state.position[1] = getGears[1] * M_PI / 180.0;
+		actual_joint_state.position[2] = getGears[2] * M_PI / 180.0;
+		actual_joint_state.position[3] = getGears[3] * M_PI / 180.0;
+		actual_joint_state.position[4] = getGears[4] * M_PI / 180.0;
+		actual_joint_state.position[5] = getGears[5] * M_PI / 180.0;
 
-		for (int i = 0; i < 6; i++)
-		{
-			actual_joint_state.position[i] = getGears[i] * M_PI / 180.0;
-			actual_joint_state.velocity[i] = Speed[i];
-		}
-
-		switch(current_state.state){
-			case lar_comau::MachineAlarmStatus::STATE_INIT:
-				current_state.state = lar_comau::MachineAlarmStatus::STATE_RUN;
-				for (int i = 0; i < 6; i++)	{
-					if (init[i] == true) current_state.state = lar_comau::MachineAlarmStatus::STATE_INIT;
-				}
-				if (current_state.state == lar_comau::MachineAlarmStatus::STATE_RUN){
-					ROS_INFO("comau_driver: robot initialization completed");
-					for (int i = 0; i < 6; i++)	{
-						ROS_INFO("-> c4g: AXIS %d CONNECTED", i + 1);
-						ROS_INFO("   Initial Position %d: %f", i + 1, initialPositions[i]);
-						ROS_INFO("   Calibration %d: %f", i + 1, calibCONSTANTS[i]);						
-					}	
-				} 
-				break;
-
-			case lar_comau::MachineAlarmStatus::STATE_RUN:
-				if (wasGoing_old && !wasGoing)	{
-					current_state.alarm |= lar_comau::MachineAlarmStatus::ALARM_DRIVEOFF;
-					current_state.reset_required = true;
-					current_state.state = lar_comau::MachineAlarmStatus::STATE_ALARM;
-					ROS_INFO("comau_driver: ALARM_DRIVEOFF received");
-					ROS_INFO("comau_driver: switch to STATE_ALARM");
-				}	
-				break;
-
-
-			case lar_comau::MachineAlarmStatus::STATE_ALARM:
-				for (int i = 0; i < 6; i++)	{
-					setPoint[i] = getGears[i];
-				}
-				if (!wasGoing_old && wasGoing){
-					current_state.state = lar_comau::MachineAlarmStatus::STATE_RUN;
-					current_state.alarm &= ~lar_comau::MachineAlarmStatus::ALARM_DRIVEOFF;
-					current_state.reset_required = false;
-
-					ROS_INFO("comau_driver: ALARM_DRIVEON received");
-					ROS_INFO("comau_driver: switch to STATE_RUN");
-				}	
-				break;
-			default:
-				break;
-		}
+		actual_joint_state.velocity[0] = Speed[0];
+		actual_joint_state.velocity[1] = Speed[1];
+		actual_joint_state.velocity[2] = Speed[2];
+		actual_joint_state.velocity[3] = Speed[3];
+		actual_joint_state.velocity[4] = Speed[4];
+		actual_joint_state.velocity[5] = Speed[5];
 
 		joint_state_pub.publish(actual_joint_state);
 
-		comau_state_pub.publish(current_state);
+
+		if (wasGoing_old && !wasGoing)
+				{
+						current_alarm.data = "ALARM_UNKNOWN";
+						comau_alarm_pub.publish(current_alarm);/* code */
+				}	
+
+		if (!wasGoing_old && wasGoing)
+				{
+						current_alarm.data = "ALARM_NONE";
+						comau_alarm_pub.publish(current_alarm);/* code */
+				}	
 
 		wasGoing_old = wasGoing;
+
 
 		ros::spinOnce();
 		loop_rate.sleep();
@@ -330,6 +192,7 @@ int main(int argc, char *argv[])
 	}
 
 	double txRate[6];
+	bool sinAxisEnabled[6];
 	double sampleTime;
 
 	pthread_t tid_receive;
@@ -378,6 +241,16 @@ int main(int argc, char *argv[])
 
 	if (c4gOpen.start())
 	{
+
+		double initialPositions[6];
+		//double currentGearDeg[6];
+		double calibCONSTANTS[6];
+		double actualPositions[6];
+		double previousPositions[6];
+		double deltaPositions[6];
+		double OP_LIM[6][2] = {{-170, 170}, {-85, 175}, {-170, 0}, {-210, 210}, {-130, 130}, {-2700, 2700}};
+		double VT_LIM[6][2] = {{-170, 170}, {-85, 175}, {-170, 0}, {-210, 210}, {-100, 100}, {-800, 800}};
+
 		sampleTime = (double)c4gOpen.getSampleTime() / 1000.0;
 
 		double gearDeg[6];
@@ -404,7 +277,7 @@ int main(int argc, char *argv[])
 		}	 // END for (int i = 0; i < 6; i++)
 
 		bool keepGoingOn = true;
-
+		bool init[6] = {1, 1, 1, 1, 1, 1};
 
 		int val;
 
@@ -429,7 +302,7 @@ int main(int argc, char *argv[])
 								if (sinAxisEnabled[i])
 								{
 
-									/** ABSOLUTE POSITION CONTROL **/
+									//ABSOLUTE POSITION CONTROL
 									//double currentGearDeg[i] = c4gOpen.getActualPosition(ARM, i+1)*360.0/txRate[i];
 
 									if (init[i])
@@ -441,7 +314,7 @@ int main(int argc, char *argv[])
 										previousPositions[i] = initialPositions[i];
 										deltaPositions[i] = 0.0;
 										init[i] = false;
-										//cout << "-> c4g: ASSE " << i + 1 << " CONNESSO.\n";
+										cout << "-> c4g: ASSE " << i + 1 << " CONNESSO.\n";
 									
 										Z[i][3] = initialPositions[i];
 										Z[i][2] = initialPositions[i];
@@ -449,14 +322,86 @@ int main(int argc, char *argv[])
 										Z[i][0] = initialPositions[i];
 
 										//setPoint[i]=((initialPositions[i])*360/txRate[i]);;
-										/*cout << "   Posizione iniziale " << i + 1 << ": " << initialPositions[i] << "\n";
-										cout << "         Calibrazione " << i + 1 << ": " << calibCONSTANTS[i] << "\n";*/
+										cout << "   Posizione iniziale " << i + 1 << ": " << initialPositions[i] << "\n";
+										cout << "         Calibrazione " << i + 1 << ": " << calibCONSTANTS[i] << "\n";
 									} // END if (init[i])
 									else
-										allowMotion = 1;
+										al = 1;
 
-									getGears[i] =  c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i] - calibCONSTANTS[i] ;									
-									Speed[i] = double(txRate[i]) * double(c4gOpen.getActualVelocity(ARM, i + 1)); ///360.0;
+									getGears[i] =  c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i] - calibCONSTANTS[i] ;
+
+									if (al == 1)
+									{
+										allowMotion = 1;
+									}
+
+									//Operative limit control
+									if (setPoint[i] < OP_LIM[i][0])
+									{
+										//allowMotion=0;
+										setPoint[i] = OP_LIM[i][0];
+										cout << " \n ALERT: SETPOINT AXIS " << i + 1 << ": OVER LOW OP.LIMIT.\n";
+									} // END if (setPoint[i]<OP_LIM[i][0])
+
+									if (setPoint[i] > OP_LIM[i][1])
+									{
+										//allowMotion=0;
+										setPoint[i] = OP_LIM[i][1];
+										cout << " \n ALERT: SETPOINT AXIS " << i + 1 << ": OVER SUP OP.LIMIT.\n";
+									} // END if (setPoint[i]>OP_LIM[i][1])
+									//////////
+									//double realNextPoint = setPoint[i] ;
+									double lastDeg = previousPositions[i];
+
+									//Operative virtual limit control
+									bool virtual_limit_control = false;
+									if (virtual_limit_control)
+									{
+										if (setPoint[i] < (VT_LIM[i][0]))
+										{
+											setPoint[i] = VT_LIM[i][0];
+											cout << " \n Reset Forzato- " << i + 1 << "\n";
+										}
+
+										if (setPoint[i] <= (VT_LIM[i][0] + 1) && lastDeg <= (VT_LIM[i][0] + 1) && lastDeg > setPoint[i])
+										{
+											double proximity = abs(VT_LIM[i][0] - lastDeg);
+											if (proximity <= 0)
+												proximity = 0;
+											if (proximity >= 1)
+												proximity = 1;
+											double corrective = pow((proximity / 1), 2);
+											if (corrective > 1)
+												corrective = 1;
+											setPoint[i] = lastDeg - corrective * abs(setPoint[i] - lastDeg);
+										} // END if (setPoint[i]<=(VT_LIM[i][0]+1) ...
+
+										if (setPoint[i] > (VT_LIM[i][1]))
+										{
+											setPoint[i] = VT_LIM[i][1];
+											cout << " \n Reset Forzato+ " << i + 1 << "\n";
+										} // END if (setPoint[i]>(VT_LIM[i][1]))
+
+										//if (i==4) cout << " Proximity+ "<<i+1 <<": "<<(VT_LIM[i][1]-lastDeg)<<"\n";
+
+										if (setPoint[i] >= (VT_LIM[i][1] - 1) && lastDeg >= (VT_LIM[i][1] - 1) && lastDeg < setPoint[i])
+										{
+											double proximity = abs(VT_LIM[i][1] - lastDeg);
+											if (proximity <= 0)
+												proximity = 0;
+											if (proximity >= 1)
+												proximity = 1;
+											double corrective = pow((proximity / 1), 2);
+											if (corrective > 1)
+												corrective = 1;
+											setPoint[i] = lastDeg + corrective * abs(setPoint[i] - lastDeg);
+										} // END if (setPoint[i]>=(VT_LIM[i][1]-1) ...
+									}
+									//////////
+									//cout << "\n allowMotion = " << allowMotion << " \n";
+									//for (int h = 0; h < 6; h++) {
+									//	cout << "\nsetPoint[" << h << "] = " << setPoint[h] << "\n";
+									//}
 
 									if (allowMotion)
 									{
@@ -468,7 +413,6 @@ int main(int argc, char *argv[])
 										Z[i][1] = Z[i][0];
 										Z[i][0] = X;
 										gearDeg[i] = Acc;
-										//gearDeg[i] = setPoint[i];
 
 										//Operative limit control after filtering
 										if (gearDeg[i] < OP_LIM[i][0])
@@ -486,7 +430,7 @@ int main(int argc, char *argv[])
 											cout << " \n ALERT: FILTERED GEAR AXIS " << i + 1 << ": OVER SUP OP.LIMIT.\n";
 										} // END if (gearDeg[i]>OP_LIM[i][1])
 
-										GearRotations[i] = gearDeg[i];
+										GearRotations[i] = +gearDeg[i];
 									} // END if (allowMotion)
 								}	 // END if (sinAxisEnabled[i])
 							}		  // END for (int i = 0; i < 6; i++)
@@ -503,6 +447,7 @@ int main(int argc, char *argv[])
 								if (sinAxisEnabled[i])
 								{
 									arrayToSimulink[i] = getGears[i];
+									Speed[i] = double(txRate[i]) * double(c4gOpen.getActualVelocity(ARM, i + 1)); ///360.0;
 									arrayToSimulink[i + 6] = Speed[i];
 									if ((Speed[i]) >= 0.00005 || (Speed[i]) <= -0.00005)
 										IS_NOT_ANY_AXIS_MOVING = 0.0;
@@ -520,13 +465,13 @@ int main(int argc, char *argv[])
 							/*** ROS was here ***/
 
 							//cout << "Sample Time: "<<sampleTime<<endl;
-							if (c4gOpen.isInDriveOn(ARM) {
-								wasGoing = true;
-								for (int i = 0; i < 6; i++)
+							for (int i = 0; i < 6; i++)
+							{
+								if (sinAxisEnabled[i])
 								{
-									if (sinAxisEnabled[i])
+									if (c4gOpen.isInDriveOn(ARM))
 									{
-								
+										wasGoing = true;
 										actualPositions[i] = GearRotations[i];
 
 										if (allowMotion)
@@ -539,23 +484,23 @@ int main(int argc, char *argv[])
 											actualPositions[i] = initialPositions[i];
 											deltaPositions[i] = 0.0;
 										} // END else
-										c4gOpen.setTargetPosition(ARM, i + 1, (actualPositions[i] + calibCONSTANTS[i]) * txRate[i] / 360.0);
-										c4gOpen.setTargetVelocity(ARM, i + 1, deltaPositions[i] * txRate[i] / 360.0);
+									}	 // END if (c4gOpen.isInDriveOn(ARM))
+									else if (wasGoing)
+									{
+										cout << "Alarm --> DRIVE OFF.\n\n Error:" << c4gOpen.getLastError() << "\n Mode: " << c4gOpen.getMode(ARM) << endl;
+										cout.flush();
+
+										wasGoing = false;
+									}
+									c4gOpen.setTargetPosition(ARM, i + 1, (actualPositions[i] + calibCONSTANTS[i]) * txRate[i] / 360.0);
+									c4gOpen.setTargetVelocity(ARM, i + 1, deltaPositions[i] * txRate[i] / 360.0);
 									//cout << i << " pos: "<<actualPositions[i]<< " set;" << setPoint[i]*txRate[i]/360.0f+calibCONSTANTS[i] <<" tx: "<<txRate[i]<< " vel: "<<deltaPositions[i]<<std::endl;
 
-									} // END if (sinAxisEnabled[i])
-									
-								} // END or (int i = 0; i < 6; i++)
-							} 	 // END if (c4gOpen.isInDriveOn(ARM))										 
-							else if (wasGoing) {
-									cout << "Alarm --> DRIVE OFF.\n\n Error:" << c4gOpen.getLastError() << "\n Mode: " << c4gOpen.getMode(ARM) << endl;
-									cout.flush();
-
-									wasGoing = false;
-								}
+								} // END if (sinAxisEnabled[i])
+							}	 // END or (int i = 0; i < 6; i++)
 						}		  // END if (mode == C4G_OPEN_MODE_5)
 
-						if (!c4gOpen.send());
+						if (!c4gOpen.send())
 							keepGoingOn = false;
 
 						if (c4gOpen.errorOccurred())
@@ -570,7 +515,7 @@ int main(int argc, char *argv[])
 						cout.flush();
 						c4gOpen.setMode(ARM, C4G_OPEN_DRIVE_OFF);
 						c4gOpen.send();
-						//keepGoingOn = false;
+						keepGoingOn = false;
 					} // END else
 				}	 // END else --- principale
 			}		  // END if (c4gOpen.receive())

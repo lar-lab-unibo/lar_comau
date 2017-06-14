@@ -146,6 +146,13 @@ if(USE_C4G)
     ${C4GOPEN_LIBS}
     ${catkin_LIBRARIES}
   )
+  add_executable(comau_driver_working src/comau_driver_working.cpp )
+  target_link_libraries(
+    comau_driver_working
+    -lpthread
+    ${C4GOPEN_LIBS}
+    ${catkin_LIBRARIES}
+  )
 endif(USE_C4G)
 
 #NODE - Comau Cartesian Controller
