@@ -1,0 +1,6 @@
+ 
+
+      <node name="robot_state_publisher_comau" pkg="robot_state_publisher" type="state_publisher" output="screen">
+            <param name="publish_frequency" value="1000"/> <!-- Hz -->
+            <param name="aatf_prefix" value="$(arg robot_name)"/>
+        </node> 

@@ -57,6 +57,7 @@ double FcMax = 0.5;
 double FcMin = 0.1;
 double threshold[6] = {10, 10, 10, 30, 15, 30};
 int al = 0;
+bool filter_enable = true;
 
 using namespace std;
 
@@ -260,7 +261,7 @@ int main(int argc, char *argv[])
 		//-- IIR FILTER LOW-PASS --
 		//-- FILTERING setPoints[] --
 		//buffer Z
-		Fc = 0.5;
+		Fc = 1;
 		Fs = 1 / sampleTime;
 		Q = 0.5;
 		updateFilter(Fc);
@@ -412,7 +413,12 @@ int main(int argc, char *argv[])
 										Z[i][2] = Acc;
 										Z[i][1] = Z[i][0];
 										Z[i][0] = X;
-										gearDeg[i] = Acc;
+										if(filter_enable){
+											gearDeg[i] = Acc;
+										}else{
+											gearDeg[i] = setPoint[i];//Acc;
+										}
+										
 
 										//Operative limit control after filtering
 										if (gearDeg[i] < OP_LIM[i][0])

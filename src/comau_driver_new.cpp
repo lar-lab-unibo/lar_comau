@@ -457,7 +457,10 @@ int main(int argc, char *argv[])
 
 									getGears[i] =  c4gOpen.getActualPosition(ARM, i + 1) * 360.0 / txRate[i] - calibCONSTANTS[i] ;									
 									Speed[i] = double(txRate[i]) * double(c4gOpen.getActualVelocity(ARM, i + 1)); ///360.0;
-
+									
+									double IS_NOT_ANY_AXIS_MOVING = 1.0;
+									if ((Speed[i]) >= 0.00005 || (Speed[i]) <= -0.00005) IS_NOT_ANY_AXIS_MOVING = 0.0;
+									
 									if (allowMotion)
 									{
 										//FILTER 2nd order
@@ -489,38 +492,11 @@ int main(int argc, char *argv[])
 										GearRotations[i] = gearDeg[i];
 									} // END if (allowMotion)
 								}	 // END if (sinAxisEnabled[i])
-							}		  // END for (int i = 0; i < 6; i++)
+							}		  // END for (int i = 0; i < 6; i++)	
 
-							//SENDING
-							//cout << "s";
-							//to_simulinkLength = sizeof(to_simulink);
-
-							double arrayToSimulink[13];
-							double IS_NOT_ANY_AXIS_MOVING = 1.0;
-
-							for (int i = 0; i < 6; i++)
-							{
-								if (sinAxisEnabled[i])
-								{
-									arrayToSimulink[i] = getGears[i];
-									arrayToSimulink[i + 6] = Speed[i];
-									if ((Speed[i]) >= 0.00005 || (Speed[i]) <= -0.00005)
-										IS_NOT_ANY_AXIS_MOVING = 0.0;
-								} // END if (sinAxisEnabled[i])
-							}	 // END for (int i = 0; i < 6; i++)
-
-							//arrayToSimulink[12] = IS_NOT_ANY_AXIS_MOVING;
-
-							//size=sendto(udpSocketSend, arrayToSimulink, 13*8, 0,(struct sockaddr *)&to_simulink, to_simulinkLength);
-							/*if (size == -1) {
-									perror("sendto()");
-									exit(1);
-								}*/ // END if (size == -1)
-
-							/*** ROS was here ***/
 
 							//cout << "Sample Time: "<<sampleTime<<endl;
-							if (c4gOpen.isInDriveOn(ARM) {
+							if (c4gOpen.isInDriveOn(ARM)) {
 								wasGoing = true;
 								for (int i = 0; i < 6; i++)
 								{
@@ -548,9 +524,14 @@ int main(int argc, char *argv[])
 								} // END or (int i = 0; i < 6; i++)
 							} 	 // END if (c4gOpen.isInDriveOn(ARM))										 
 							else if (wasGoing) {
-									cout << "Alarm --> DRIVE OFF.\n\n Error:" << c4gOpen.getLastError() << "\n Mode: " << c4gOpen.getMode(ARM) << endl;
-									cout.flush();
-
+									for (int i = 0; i < 6; i++)
+									{
+										if (sinAxisEnabled[i])
+										{
+											c4gOpen.setTargetPosition(ARM, i + 1, (getGears[i] + calibCONSTANTS[i]) * txRate[i] / 360.0);
+											c4gOpen.setTargetVelocity(ARM, i + 1, 0.0);
+										}
+									}
 									wasGoing = false;
 								}
 						}		  // END if (mode == C4G_OPEN_MODE_5)
@@ -571,17 +552,17 @@ int main(int argc, char *argv[])
 						c4gOpen.setMode(ARM, C4G_OPEN_DRIVE_OFF);
 						c4gOpen.send();
 						//keepGoingOn = false;
-					} // END else
-				}	 // END else --- principale
-			}		  // END if (c4gOpen.receive())
+					}// END else
+				}// END else --- principale
+			}// END if (c4gOpen.receive())
 			else
 			{
 				cout << "Test error 2.\n\n";
 				cout.flush();
 				keepGoingOn = false;
 			} // END else
-		}	 // END while (keepGoingOn)
-	}		  // END if (c4gOpen.start())
+		}// END while (keepGoingOn)
+	}// END if (c4gOpen.start())
 
 	c4gOpen.stop();
 

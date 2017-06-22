@@ -7,10 +7,13 @@
 	
         <param name="robot_description" command="$(find xacro)/xacro.py '$(find lar_comau)/urdf/comau_smart_six.urdf.xacro'"/>	
         
-       <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+       
+
+      <node name="robot_state_publisher_comau" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
             <param name="publish_frequency" value="1000"/> <!-- Hz -->
             <param name="aatf_prefix" value="$(arg robot_name)"/>
         </node> 
+        
 
 		<node name="comau_driver_working" pkg="lar_comau" type="comau_driver_working" output="screen" />
            
