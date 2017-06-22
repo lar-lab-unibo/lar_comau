@@ -57,7 +57,7 @@ double FcMax = 0.5;
 double FcMin = 0.1;
 double threshold[6] = {10, 10, 10, 30, 15, 30};
 int al = 0;
-bool filter_enable = true;
+bool filter_enable = false;
 
 using namespace std;
 
@@ -79,6 +79,8 @@ void jCallback(const sensor_msgs::JointState &msg)
 
 	double degreeSetPoint;
 
+	filter_enable = msg.header.frame_id.compare("filtered")==0;
+	
 	while (al == 0)
 		;
 
